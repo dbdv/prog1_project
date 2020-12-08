@@ -1,0 +1,25 @@
+Carreras de pregrado
+1.Tecnicatura Universitaria en Electrónica
+2.Tecnicatura Universitaria en Energías Renovables
+3.Tecnicatura Universitaria en Explotación Minera
+4.Tecnicatura Universitaria en Geoinformática
+5.Tecnicatura Universitaria en Obras Viales  
+6.Tecnicatura Universitaria en Procesamiento de Minerales
+7.Tecnicatura Universitaria en Redes de Computadoras
+8.Tecnicatura Universitaria en Telecomunicaciones
+9.Tecnicatura Universitaria en Web
+10.Tecnicatura Universitaria en Fotografía
+Carreras de grado 
+11.Ingeniería Electrónica con Orientación en Sistemas Digitales
+12.Ingeniería en Computación
+13.Ingeniería en Informática
+14.Ingeniería en Minas
+15.Licenciatura en Ciencias de la Computación  (Título Intermedio de Analista-Programador Universitario)
+16.Licenciatura en Ciencias Geológicas
+17.Licenciatura en Ciencias Matemáticas
+18.Licenciatura en Física  (Título Intermedio de Auxiliar en Física Aplicada)
+19.Licenciatura en Matemática Aplicada
+20.Profesorado en Ciencias de la Computación
+21.Profesorado en Física
+22.Profesorado en Matemática
+23.Profesorado en Tecnología Electrónica
