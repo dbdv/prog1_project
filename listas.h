@@ -72,8 +72,8 @@ int isEmpy(list_ingresante ls){
 }
 
 int isFull(){
-    nodo *nuevo;
-    if(nuevo=(nodo*)malloc(sizeof(nodo)) == NULL)
+    nodo *nuevo=(nodo*)malloc(sizeof(nodo));
+    if(nuevo == NULL)
         return 1;
     else{
         free((void*) nuevo);

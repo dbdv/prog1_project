@@ -16,7 +16,6 @@ u->163
 void cargar_usuarios(list_ingresante *lista)
 {
     long dni;
-    int aux1;
     char aux[15];
     ingresante pepe;
 
@@ -95,11 +94,12 @@ void verIngresante(list_ingresante lista, char* carreras[])
     do
     {
         printf("Ingrese el DNI del ingresante que quiere consultar: ");
-        scanf("%ld", aux);
+        scanf("%ld", &aux);
         if(aux < 10000000 || aux > 99999999)
             printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
     }while(aux < 10000000 || aux > 99999999);
 
+    reset(&lista);
     while(!isOos(lista) && controlaux)
     {
         ingre = copyy(lista);
@@ -109,8 +109,24 @@ void verIngresante(list_ingresante lista, char* carreras[])
             printf("Apellido: %s\n", mostrar_ape(ingre));
             printf("DNI: %ld\n", mostrar_dni(ingre));
             printf("Celular: %s\n", mostrar_cel(ingre));
-            printf("Estado : %s\n", mostrar_estado(ingre));
-            printf("Condicion de ingreso: %s\n", mostrar_estadoIngreso(ingre));
+            printf("Estado: ");
+            switch(mostrar_estado(ingre))
+            {
+            case 1:
+                printf("preinscripto.\n");
+                break;
+            case 2:
+                printf("aspirante.\n");
+                break;
+            case 3:
+                printf("inscripto.\n");
+                break;
+            }
+            printf("Condicion de ingreso: ");
+            if(mostrar_estadoIngreso(ingre))
+               printf("aprobado.\n");
+            else
+                printf("no aprobado.\n");
             printf("Carrera/s:\n");
             for(i = 0; i < 3; i++)
             {
@@ -167,15 +183,34 @@ void aprobaron(list_ingresante lista)
 
 }
 
-void guardarTFA(list_ingresante lista)
+void guardarTFA(list_ingresante lista, char *carreras[])
 {
+    FILE *tfa = fopen("TFA.txt", "w");
+    int *id = mostrar_idCarreras;
+    ingresante aux = copyy(lista);
 
+    reset(&lista);
+    while(!isOos(lista))
+    {
+        if(!mostrar_estadoIngreso(aux))
+        {
+            fprintf(tfa, "%s\n%s\n%ld\n%s\nCarrera\s", mostrar_nom(aux), mostrar_ape(aux), mostrar_dni(aux), mostrar_cel(aux));
+            if(id[0] > 0 &&  id[0] < 23)
+                fprintf(tfa, "\t%s\n", carreras[id[0]]);
+            if(id[1] > 0 &&  id[1] < 23)
+                fprintf(tfa, "\t%s\n", carreras[id[1]]);
+            if(id[2] > 0 &&  id[2] < 23)
+                fprintf(tfa, "\t%s\n", carreras[id[2]]);
+
+        }
+    }
+    fclose(tfa);
 }
 
 
 int main()
 {
-    int option, i, j=0, aux1;
+    int option, i, j=0;
     long auxl;
     char *carreras[25], aux[20];
     list_ingresante lista;
@@ -183,62 +218,41 @@ int main()
     FILE *arch_carreras = fopen("carreras.txt", "r");
     FILE *arch_ingresantes = fopen("ingresantes.txt", "r");
 
+    initt(&lista);
+
     for(i=0; i<25; i++)
         carreras[i] = (char *) malloc(sizeof(char)*50);
 
     for(i=0; i <= 24; i++)
         fgets(carreras[i],1000,arch_carreras);
 
-    for(i=0; i < 20; i++)
+    /*for(i=0; i < 20; i++)
     {
         init(&cargados[i]);
         for(j=0; j<4; j++){
-            fgets(aux, 20, arch_ingresantes);
+
             switch(j)
                 {
                 case 0:
+                    fgets(aux, 20, arch_ingresantes);
                     carga_nom(&cargados[i],aux);
                     break;
                 case 1:
+                    fgets(aux, 20, arch_ingresantes);
                     carga_ape(&cargados[i],aux);
                     break;
                 case  2:
+                    fgets(aux, 20, arch_ingresantes);
                     carga_cel(&cargados[i],aux);
                     break;
                 case 3:
-                    carga_dni(&cargados[i],aux1);
-                    break;
-                }
-        }
-        /*strcpy(aux, mostrar_nom(cargados[i]));
-        printf("%s", aux);Para probar que la carga funciona*/
-    }
-    /*{
-        init(&cargados[i]);
-        for(j=0;j<=3;j++)
-        {
-                switch(j)
-                {
-                case 0:
-                    fread(aux,sizeof(char)*20, 1,arch_ingresantes);
-                    carga_nom(&cargados[i],aux);
-                    break;
-                case 1:
-                    fread(aux, sizeof(char)*20, 1,arch_ingresantes);
-                    carga_ape(&cargados[i],aux);
-                    break;
-                case  2:
-                    fread(aux, sizeof(char)*20, 1, arch_ingresantes);
-                    carga_cel(&cargados[i],aux);
-                    break;
-                case 3:
-                    fread(&aux1, sizeof(long int), 1, arch_ingresantes);
-                    carga_dni(&cargados[i],aux1);
+                    fscanf(arch_ingresantes, "%ld", &auxl);
+                    carga_dni(&cargados[i],auxl);
                     break;
                 }
         }
         strcpy(aux, mostrar_nom(cargados[i]));
-        printf("%s", aux);
+        printf("%s", aux);/*Para probar que la carga funciona
     }*/
 
 
@@ -318,13 +332,14 @@ int main()
         if(isEmpy(lista))
             printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
         else
-            guardarTFA(lista);
+            guardarTFA(lista, carreras);
         break;
     case 0:
         printf("Hasta luego!\n");
     }
     }while(option != 0);
 
+    free((void*)carreras);
     fclose(arch_carreras);
     fclose(arch_ingresantes);
 
