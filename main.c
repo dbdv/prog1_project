@@ -13,7 +13,7 @@ o->162
 u->163
 */
 
-void cargar_usuarios(list_ingresante *lista)
+/*A*/void cargar_usuarios(list_ingresante *lista)
 {
     long dni;
     char aux[15];
@@ -46,7 +46,7 @@ void cargar_usuarios(list_ingresante *lista)
 
 }
 
-void anotar_carreras(char *carreras[], ingresante *ingre)
+/**/void anotar_carreras(char *carreras[], ingresante *ingre)
 {
     int option, id, i;
 
@@ -85,7 +85,7 @@ void anotar_carreras(char *carreras[], ingresante *ingre)
     //SOLUCIONAR OPERACION CARGAR CARRERA EN LISTA.H
 }
 
-void verIngresante(list_ingresante lista, char* carreras[])
+/*C*/void verIngresante(list_ingresante lista, char* carreras[])
 {
     long aux;
     int controlaux = 1, i, aux1;
@@ -142,7 +142,7 @@ void verIngresante(list_ingresante lista, char* carreras[])
         printf("El usuario que intenta ver no se encuentra en el listado.\n");
 }
 
-void ingresantesDe(char *carreras[])
+/*D*/void ingresantesDe(char *carreras[], list_ingresante l)
 {
     int i, aux;
     for(i=0; i <= 24; i++ )
@@ -155,7 +155,21 @@ void ingresantesDe(char *carreras[])
             printf("Debe ingresar un ID valido.\n");
     }while(aux <0 || aux > 22);
 
-    //TERMINAR
+    printf("Los ingresantes de la carrera %s son:\n", carreras[aux]);
+    reset(&l);
+    while(!isOos(l))
+    {
+        for(i=0; i<3; i++)
+        {
+            if(mostrar_idCarreras(copyy(l)) == aux)
+             {
+                printf("Nombre: %s\n", mostrar_nom(copyy(l)));
+                printf("Apellido: %s\n", mostrar_ape(copyy(l)));
+                printf("DNI: %ld\n", mostrar_dni(copyy(l)));
+                printf("Celular: %s\n", mostrar_cel(copyy(l)));
+             }
+        }
+    }
 }
 
 void verCargados(list_ingresante lista)
@@ -256,17 +270,19 @@ int main()
     }*/
 
 
-    printf("\t\tPRACTICO DE MAQUINA INTEGRADOR\n");
-    printf("\t\tSISTEMA UNSL\n");
-    printf("\tCarrera: Ingenier%ca en inform%ctica\n\tIntegrantes: Diaz Emiliano-Bustillos Daniel\n\n", 161,160);
+    printf("------------------------\tPRACTICO DE MAQUINA INTEGRADOR        ------------------------\n");
+    printf("Proyecto: sist de gesti%cn de ingresantes 2021.\nCarrera: Ingenier%ca en inform%ctica\nIntegrantes: Diaz Emiliano-Bustillos Daniel\n\n", 162, 161,160);
 
     do
     {
-        printf("\tMENU DE OPCIONES DE OPERACIONES\n");
-        printf("1.Cargar una cantidad n de usuarios.\t2.Mostar los datos de un ingresante.\t3.Ver todos los ingresantes de una materia.\n");
-        printf("4.Ver todos los ingresantes cargados.\t5.Modificar el campo ingreso de un usuario.\t6.Inscribir a otra carrera.\n");
-        printf("7.Anular la inscripcion a carrera.\t8.Ver la cantidad de ingresantes de x carrera en la condicion aspirante.\n");
-        printf("9.Ver los ingresantes que aprobaron el ingreso.\t10.Guardar los datos de los ingresantes que pasaron al TFA.\t0.Salir\n");
+        printf("\t\t\t\t\tSISTEMA UNSL\n");
+        printf("------------------------\tMENU DE OPCIONES DE OPERACIONES        ------------------------\n");
+        printf("<1> Cargar una cantidad n de usuarios.\t\t<6> Inscribir a otra carrera.\n");
+        printf("<2> Mostar los datos de un ingresante.\t\t<7> Anular la inscripcion a carrera.\n");
+        printf("<3> Ver todos los ingresantes de una materia.\t<8> Ver la cantidad de ingresantes de x carrera en la condicion aspirante.\n");
+        printf("<4> Ver todos los ingresantes cargados.\t\t<9> Ver los ingresantes que aprobaron el ingreso.\n");
+        printf("<5> Modificar el campo ingreso de un usuario.\t<10> Guardar los datos de los ingresantes que pasaron al TFA.\n");
+        printf("<0> Salir\n");
         printf("Operacion a realizar: ");
         scanf("%i", &option);
         if(option < 0 || option > 10)
@@ -290,7 +306,7 @@ int main()
         if(isEmpy(lista))
             printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
         else
-            ingresantesDe(carreras);
+            ingresantesDe(carreras, lista);
         break;
     case 4:
         if(isEmpy(lista))
