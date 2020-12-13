@@ -232,42 +232,23 @@ int main()
     FILE *arch_carreras = fopen("carreras.txt", "r");
     FILE *arch_ingresantes = fopen("ingresantes.txt", "r");
 
+    if(arch_carreras == NULL || arch_ingresantes == NULL)
+    {
+        printf("Error con la precarga de archivos. El programa no puede iniciar.\n");
+        exit(1);
+    }
+
     initt(&lista);
 
     for(i=0; i<25; i++)
-        carreras[i] = (char *) malloc(sizeof(char)*50);
+        carreras[i] = (char *) malloc(sizeof(char)*100);
 
-    for(i=0; i <= 24; i++)
-        fgets(carreras[i],1000,arch_carreras);
+    for(i=0; i < 25; i++)
+    {fscanf(arch_carreras, "%[^\n] s", carreras[i]);
+    printf("%s\n", carreras[i]);}
+    /*
 
-    /*for(i=0; i < 20; i++)
-    {
-        init(&cargados[i]);
-        for(j=0; j<4; j++){
-
-            switch(j)
-                {
-                case 0:
-                    fgets(aux, 20, arch_ingresantes);
-                    carga_nom(&cargados[i],aux);
-                    break;
-                case 1:
-                    fgets(aux, 20, arch_ingresantes);
-                    carga_ape(&cargados[i],aux);
-                    break;
-                case  2:
-                    fgets(aux, 20, arch_ingresantes);
-                    carga_cel(&cargados[i],aux);
-                    break;
-                case 3:
-                    fscanf(arch_ingresantes, "%ld", &auxl);
-                    carga_dni(&cargados[i],auxl);
-                    break;
-                }
-        }
-        strcpy(aux, mostrar_nom(cargados[i]));
-        printf("%s", aux);/*Para probar que la carga funciona
-    }*/
+    */
 
 
     printf("------------------------\tPRACTICO DE MAQUINA INTEGRADOR        ------------------------\n");

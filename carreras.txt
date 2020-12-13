@@ -14,7 +14,7 @@ Carreras de grado
 12.Ingeniería en Computación
 13.Ingeniería en Informática
 14.Ingeniería en Minas
-15.Licenciatura en Ciencias de la Computación  (Título Intermedio de Analista-Programador Universitario)
+15.Licenciatura en Ciencias de la Computación (Título Intermedio Analista-Programador Universitario)
 16.Licenciatura en Ciencias Geológicas
 17.Licenciatura en Ciencias Matemáticas
 18.Licenciatura en Física  (Título Intermedio de Auxiliar en Física Aplicada)
