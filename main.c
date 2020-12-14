@@ -13,40 +13,64 @@ o->162
 u->163
 */
 
-/*A*/void cargar_usuarios(list_ingresante *lista)
+/*A*/void cargar_usuarios(list_ingresante *lista, char *carreras[])
 {
     long dni;
     char aux[15];
-    ingresante pepe;
+    int estado;
+    ingresante ingre;
 
     printf("Ingrese su nombre: ");
     fflush(stdin);
     gets(aux);
-    carga_nom(&pepe,aux);
+    carga_nom(&ingre,aux);
 
     printf("Ingrese su apellido: ");
     fflush(stdin);
     gets(aux);
-    carga_ape(&pepe,aux);
+    carga_ape(&ingre,aux);
 
     printf("Ingrese su cel: ");
     fflush(stdin);
     gets(aux);
     /*AGREGAR CONTROL*/
-    carga_cel(&pepe,aux);
+    carga_cel(&ingre,aux);
 
-    printf("Ingese su dni: ");
+
     do
     {
+        printf("Ingese su dni: ");
         scanf("%ld", &dni);
         if(dni < 10000000 || dni > 99999999)
             printf("El DNI que quiere ingresar es incorrecto.\n");
     }while(dni < 10000000 || dni > 99999999);
-    carga_dni(&pepe, dni);
+    carga_dni(&ingre, dni);
+
+    do
+    {
+        printf("Aprob%c el ingreso\n<1> Si\t<0> No\n", 162);
+        scanf("%i", &estado);
+        if(estado != 1 && estado !=0)
+            printf("Debe elegir una de las opciones que se muestran.\n");
+    }while(estado != 1 && estado !=0);
+
+    carga_ingreso(&ingre, estado);
+
+    do
+    {
+        printf("Condici&cn\t<1> Preinscripto\t<2> Aspirante\t<3> Ingresante\n", 162);
+        scanf("%i", &estado);
+        if(estado < 1 || estado > 3)
+            printf("Debe elegir una de las opciones que se muestran.\n");
+    }while(estado < 1 || estado > 3);
+
+    anotar_carrera(carreras, &ingre);
+
+    insertt(lista, ingre);
 
 }
 
-/**/void anotar_carreras(char *carreras[], ingresante *ingre)
+/*extra*/void anotar_carrera(char *carreras[], ingresante *ingre)
 {
     int option, id, i;
 
@@ -63,7 +87,7 @@ u->163
             for(i=0; i<=10; i++)
                 printf("%s", carreras[i]);
         }
-    else
+    else if(option == 2)
     {
         for(i=11; i<=25; i++)
             printf("%s",carreras[i]);
@@ -77,12 +101,9 @@ u->163
             printf("No es un ID v%clido. Intente nuevamente.\n",162);
         else if(id == 10)
             printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
-    }while(id<0 || id > 23 || id == 10);
+    }while(id<0 || id > 24 || id == 10);
 
-    // AGREGAR ID carga_carrera(ingre,id);
-    printf("%s",carreras[ingre->ID_carr[0]]);
-
-    //SOLUCIONAR OPERACION CARGAR CARRERA EN LISTA.H
+    carga_carrera(&ingre, id, 0);
 }
 
 /*B*/ingresante verIngresante(list_ingresante lista)
@@ -290,7 +311,7 @@ int main()
         if(isFull(lista))
             printf("La lista se encuentra llena, no puede cargar mas usuarios.\n");
         else
-            cargar_usuarios(&lista);
+            cargar_usuarios(&lista, carreras);
         break;
     case 2:
         if(isEmpy(lista))

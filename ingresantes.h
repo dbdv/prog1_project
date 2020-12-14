@@ -17,6 +17,9 @@ void init(ingresante* ingre)
     srand(time(NULL));
     n = rand();
     (*ingre).n_inscrip = n;
+    (*ingre).ID_carr[0] = 0;
+    (*ingre).ID_carr[1] = 0;
+    (*ingre).ID_carr[2] = 0;
 }
 
 /*FUNCIONES CARGAR*/
