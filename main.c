@@ -215,7 +215,7 @@ int main()
             else{
                 do{
                 printf("Ingrese DNI de ingresante:");
-                scanf("%d",auxD);
+                scanf("%d",&auxD);
                 }while(auxD<10000000 || auxD>99999999);
             darBaja(&lista,auxD,ingre,carreras);
             }
