@@ -142,7 +142,7 @@ u->163
     int  i, aux1;
     ingresante ingre = verIngresante(lista);
 
-    if(mostrar_dni(ingre))
+    if(mostrar_dni(ingre) == 0)
         printf("El usuario que intenta ver no se encuentra en el listado.\n");
     else
     {
@@ -168,13 +168,13 @@ u->163
                printf("aprobado.\n");
             else
                 printf("no aprobado.\n");
-            printf("Carrera/s:\n");
-            for(i = 0; i < 3; i++)
-            {
-                aux1 = *(mostrar_idCarreras(ingre)+i);
-                if( aux1 > 0 || aux1 < 24)
-                    printf("\t%s.\n", carreras[aux1]);
-            }
+        printf("Carrera/s:\n");
+        for(i = 0; i < 3; i++)
+        {
+            aux1 = *(mostrar_idCarreras(ingre)+i);
+            if( aux1 > 0 || aux1 < 24)
+                printf("\t%s.\n", carreras[aux1]);
+        }
     }
 }
 
@@ -197,7 +197,7 @@ u->163
     {
         for(i=0; i<3; i++)
         {
-            if(mostrar_idCarreras(copyy(l)) == aux)
+            if(mostrar_idCarreras(copyy(l)) == aux && mostrar_estado(copyy(l)) == 3)
              {
                 printf("Nombre: %s\n", mostrar_nom(copyy(l)));
                 printf("Apellido: %s\n", mostrar_ape(copyy(l)));
@@ -205,12 +205,27 @@ u->163
                 printf("Celular: %s\n", mostrar_cel(copyy(l)));
              }
         }
+        forwardd(&l);
     }
 }
 
-/*E*/void verCargados(list_ingresante lista)
+/*E*/void verCargados(list_ingresante lista, char *carreras[])
 {
-
+    int i, aux1;
+    reset(&lista);
+    while(!isOos(lista))
+    {
+        printf("Nombre: %s.\nApellido: %s.\nDNI: %ld.\n", mostrar_nom(copyy(lista)), mostrar_ape(copyy(lista)), mostrar_dni(copyy(lista)));
+        printf("Celular: %s.\n",mostrar_cel(copyy(lista)));
+        printf("Carrera/s:\n");
+        for(i = 0; i < 3; i++)
+        {
+            aux1 = *(mostrar_idCarreras(copyy(lista))+i);
+            if( aux1 > 0 || aux1 < 24)
+                printf("\t%s.\n", carreras[aux1]);
+        }
+        forwardd(&lista);
+    }
 }
 
 /*G*/void inscribirOtra(list_ingresante *lista)
@@ -280,11 +295,9 @@ int main()
         carreras[i] = (char *) malloc(sizeof(char)*100);
 
     for(i=0; i < 25; i++)
-    {fscanf(arch_carreras, "%[^\n] s", carreras[i]);
-    printf("%s\n", carreras[i]);}
-    /*
+        fscanf(arch_carreras, "%[^\n] s", carreras[i]);
 
-    */
+    /*----------------------------------------------------------------------------------------------------*/
 
 
     printf("------------------------\tPRACTICO DE MAQUINA INTEGRADOR        ------------------------\n");
@@ -329,13 +342,12 @@ int main()
         if(isEmpy(lista))
             printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
         else
-            verCargados(lista);
+            verCargados(lista, carreras);
         break;
     case 5:
         if(isEmpy(lista))
             printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
         else
-            verCargados(lista);
         break;
     case 6:
         if(isEmpy(lista))
