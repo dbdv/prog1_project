@@ -25,6 +25,8 @@ u->163
 
 /*E*/void verCargados(list_ingresante lista, char *carreras[]);
 
+/*F*/void cambiarIngreso(list_ingresante *lista);
+
 /*G*/void inscribirOtra(list_ingresante *lista, char *carreras[], ingresante ingre);
 
 /*H*/void darBaja(list_ingresante *lista,long aux,ingresante ingre,char *carreras[]);
@@ -117,6 +119,7 @@ int main()
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+                cambiarIngreso(&lista);
             break;
         case 6:
             if(isEmpy(lista))
@@ -473,6 +476,58 @@ int main()
         }
         forwardd(&lista);
     }
+}
+
+/*F*/void cambiarIngreso(list_ingresante *lista)
+{
+    ingresante ingre;
+    long auxD;
+    int aux, papeles;
+    do
+                {
+                    printf("Ingrese el DNI del ingresante: ");
+                    scanf("%ld", &auxD);
+                    if(auxD < 10000000 || auxD > 99999999)
+                    printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
+                }while(auxD < 10000000 || auxD > 99999999);
+
+                do
+                {
+                    printf("<1> Ingreso aprobado.\t<2> Ingreso desaprobado.\n");
+                    scanf("%i", &aux);
+                }while(aux != 1 || aux !=2);
+
+                reset(lista);
+                while(!isOos(*lista) && auxD != mostrar_dni(ingre))
+                {
+                    ingre = copyy(*lista);
+                    if(auxD == mostrar_dni(ingre) && aux ==1)
+                    {
+                        suppres(lista);
+                        mod_estIngreso(&ingre, aux);
+                        mod_estado(&ingre, 3);
+                    }
+                    else if(auxD == mostrar_dni(ingre) && aux ==2)
+                    {
+                        suppres(lista);
+                        mod_estIngreso(&ingre, aux);
+                        do
+                        {
+                            printf("<1> Papeles completos.\t<2> Papeles incompletos.\n");
+                            scanf("%i", &papeles);
+                        }while(papeles != 1 && papeles != 2);
+
+                        if(papeles == 1)
+                            mod_estado(&ingre, 2);
+                        if(papeles == 2)
+                            mod_estIngreso(&ingre, 1);
+                    }
+                    else
+                    {
+                        forwardd(lista);
+                    }
+                }
+                insertt(lista, ingre);
 }
 
 /*G*/void inscribirOtra(list_ingresante *lista, char *carreras[], ingresante ingre)
