@@ -10,16 +10,16 @@ Carreras de pregrado
 9.Tecnicatura Universitaria en Web
 10.Tecnicatura Universitaria en Fotografía
 Carreras de grado 
-11.Ingeniería Electrónica con Orientación en Sistemas Digitales
-12.Ingeniería en Computación
-13.Ingeniería en Informática
-14.Ingeniería en Minas
-15.Licenciatura en Ciencias de la Computación (Título Intermedio Analista-Programador Universitario)
-16.Licenciatura en Ciencias Geológicas
-17.Licenciatura en Ciencias Matemáticas
-18.Licenciatura en Física  (Título Intermedio de Auxiliar en Física Aplicada)
-19.Licenciatura en Matemática Aplicada
-20.Profesorado en Ciencias de la Computación
-21.Profesorado en Física
-22.Profesorado en Matemática
-23.Profesorado en Tecnología Electrónica
+12.Ingeniería Electrónica con Orientación en Sistemas Digitales
+13.Ingeniería en Computación
+14.Ingeniería en Informática
+15.Ingeniería en Minas
+16.Licenciatura en Ciencias de la Computación (Título Intermedio Analista-Programador Universitario)
+17.Licenciatura en Ciencias Geológicas
+18.Licenciatura en Ciencias Matemáticas
+19.Licenciatura en Física  (Título Intermedio de Auxiliar en Física Aplicada)
+20.Licenciatura en Matemática Aplicada
+21.Profesorado en Ciencias de la Computación
+22.Profesorado en Física
+23.Profesorado en Matemática
+24.Profesorado en Tecnología Electrónica

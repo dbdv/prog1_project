@@ -228,8 +228,48 @@ u->163
     }
 }
 
-/*G*/void inscribirOtra(list_ingresante *lista)
+/*G*/void inscribirOtra(list_ingresante *lista, char *carreras[], ingresante ingre)
 {
+    int option, id, i, *carr;
+
+    printf("\tINSCRIPCION A CARRERAS.\n");
+    printf("1.Carreras de pregrado\t2.Carreras de grado.\t0.Salir del programa.\n");
+    do
+    {
+        scanf("%i", &option);
+        if(option <0 || option >2)
+            printf("No seleccion%c una opci%cn v%clida. Intente nuevamente.\n",162,162,160);
+    }while(option < 0 || option >2);
+    if(option == 1)
+        {
+            for(i=0; i<=10; i++)
+                printf("%s", carreras[i]);
+        }
+    else if(option == 2)
+    {
+        for(i=11; i<=25; i++)
+            printf("%s",carreras[i]);
+    }
+
+    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+    do
+    {
+        scanf("%i", &id);
+        if(id<0 || id > 23 || id == 11)
+            printf("No es un ID v%clido. Intente nuevamente.\n",162);
+        else if(id == 10)
+            printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+        else if(id == 11)
+            printf("Ya se ha inscripto en esa carrera.\n");
+    }while(id<0 || id > 24 || id == 10 || id == 11);
+
+    carr = mostrar_idCarreras(ingre);
+    if(carr[1] == 0)
+        carga_carrera(&ingre, id, 1);
+    else
+        carga_carrera(&ingre, id, 2);
+
+    insertt(lista, ingre);
 
 }
 
@@ -276,10 +316,10 @@ u->163
 int main()
 {
     int option, i, j=0;
-    long auxl;
+    long auxD;
     char *carreras[25], aux[20];
     list_ingresante lista;
-    ingresante cargados[20];
+    ingresante cargados[20], ingre;
     FILE *arch_carreras = fopen("carreras.txt", "r");
     FILE *arch_ingresantes = fopen("ingresantes.txt", "r");
 
@@ -353,7 +393,32 @@ int main()
         if(isEmpy(lista))
             printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
         else
-            inscribirOtra(&lista);
+        {
+            do
+            {
+                printf("Ingrese el DNI del ingresante: ");
+                scanf("%ld", &auxD);
+                if(auxD < 10000000 || auxD > 99999999)
+                printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
+            }while(auxD < 10000000 || auxD > 99999999);
+
+            reset(&lista);
+            while(!isOos(lista))
+            {
+                ingre = copyy(lista);
+                if(aux == mostrar_dni(ingre))
+                {
+                    if((*mostrar_idCarreras(ingre)) == 0)
+                        printf("Este ingresante no está inscripto en ninguna carrera.\n");
+                    else
+                        suppres(&lista);
+                }else
+                {
+                    forwardd(&lista);
+                }
+            }
+            inscribirOtra(&lista, carreras, ingre);
+        }
         break;
     case 7:
         if(isEmpy(lista))

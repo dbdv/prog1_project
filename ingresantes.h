@@ -96,17 +96,11 @@ int* mostrar_idCarreras(ingresante ingre){
 }
 
 /*FUNCIONES MODIFICAR*/
-/*void mod_carr(ingresante* ingre, int n, int id){
-    int i;
-    if(n == 1)
-        printf("error");//carga_carrera(ingre, id);
-    else if(n == 2){
-        for(i=0; i<3; i++){
-            if((*ingre).ID_carr[i] == id)
-                (*ingre).ID_carr[i] == NULL;
-        }
-    }
-}*/
+
+void mod_carr(ingresante* ingre, int i, int id)
+{
+    (*ingre).ID_carr[i] = id;
+}
 
 void mod_estIngreso(ingresante* ingre, int estI){
     (*ingre).estIngreso = estI;
