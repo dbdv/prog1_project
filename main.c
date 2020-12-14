@@ -69,7 +69,7 @@ u->163
             printf("%s",carreras[i]);
     }
 
-    printf("Escriba el ID de la materia a la que se quiere inscribir: ");
+    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
     do
     {
         scanf("%i", &id);
@@ -85,10 +85,9 @@ u->163
     //SOLUCIONAR OPERACION CARGAR CARRERA EN LISTA.H
 }
 
-/*C*/void verIngresante(list_ingresante lista, char* carreras[])
+/*B*/ingresante verIngresante(list_ingresante lista)
 {
     long aux;
-    int controlaux = 1, i, aux1;
     ingresante ingre;
 
     do
@@ -100,29 +99,50 @@ u->163
     }while(aux < 10000000 || aux > 99999999);
 
     reset(&lista);
-    while(!isOos(lista) && controlaux)
+    while(!isOos(lista))
     {
         ingre = copyy(lista);
         if(aux == mostrar_dni(ingre))
         {
-            printf("Nombre: %s\n", mostrar_nom(ingre));
-            printf("Apellido: %s\n", mostrar_ape(ingre));
-            printf("DNI: %ld\n", mostrar_dni(ingre));
-            printf("Celular: %s\n", mostrar_cel(ingre));
-            printf("Estado: ");
-            switch(mostrar_estado(ingre))
-            {
-            case 1:
-                printf("preinscripto.\n");
-                break;
-            case 2:
-                printf("aspirante.\n");
-                break;
-            case 3:
-                printf("inscripto.\n");
-                break;
-            }
-            printf("Condicion de ingreso: ");
+            return ingre;
+        }else
+        {
+            forwardd(&lista);
+        }
+    }
+
+    carga_dni(&ingre, 0);
+
+    return ingre;
+}
+
+/*C*/void mostrarBuscado(list_ingresante lista, char* carreras[])
+{
+    int  i, aux1;
+    ingresante ingre = verIngresante(lista);
+
+    if(mostrar_dni(ingre))
+        printf("El usuario que intenta ver no se encuentra en el listado.\n");
+    else
+    {
+        printf("Nombre: %s\n", mostrar_nom(ingre));
+        printf("Apellido: %s\n", mostrar_ape(ingre));
+        printf("DNI: %ld\n", mostrar_dni(ingre));
+        printf("Celular: %s\n", mostrar_cel(ingre));
+        printf("Estado: ");
+        switch(mostrar_estado(ingre))
+        {
+        case 1:
+        printf("preinscripto.\n");
+        break;
+        case 2:
+        printf("aspirante.\n");
+        break;
+        case 3:
+        printf("inscripto.\n");
+        break;
+        }
+        printf("Condicion de ingreso: ");
             if(mostrar_estadoIngreso(ingre))
                printf("aprobado.\n");
             else
@@ -134,12 +154,7 @@ u->163
                 if( aux1 > 0 || aux1 < 24)
                     printf("\t%s.\n", carreras[aux1]);
             }
-            controlaux = 0;
-        }
     }
-
-    if(isOos(lista) && controlaux == 1)
-        printf("El usuario que intenta ver no se encuentra en el listado.\n");
 }
 
 /*D*/void ingresantesDe(char *carreras[], list_ingresante l)
@@ -172,32 +187,32 @@ u->163
     }
 }
 
-void verCargados(list_ingresante lista)
+/*E*/void verCargados(list_ingresante lista)
 {
 
 }
 
-void inscribirOtra(list_ingresante *lista)
+/*G*/void inscribirOtra(list_ingresante *lista)
 {
 
 }
 
-void darBaja(list_ingresante *lista)
+/*H*/void darBaja(list_ingresante *lista)
 {
 
 }
 
-void aspirantesDe(list_ingresante lista)
+/*I*/void aspirantesDe(list_ingresante lista)
 {
 
 }
 
-void aprobaron(list_ingresante lista)
+/*J*/void aprobaron(list_ingresante lista)
 {
 
 }
 
-void guardarTFA(list_ingresante lista, char *carreras[])
+/*K*/void guardarTFA(list_ingresante lista, char *carreras[])
 {
     FILE *tfa = fopen("TFA.txt", "w");
     int *id = mostrar_idCarreras;
@@ -281,7 +296,7 @@ int main()
         if(isEmpy(lista))
             printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
         else
-            verIngresante(lista, carreras);
+            mostrarBuscado(lista, carreras);
         break;
     case 3:
         if(isEmpy(lista))

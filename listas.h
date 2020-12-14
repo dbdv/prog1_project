@@ -44,6 +44,8 @@ void insertt(list_ingresante *ls, ingresante dato){
     if(ls->cur == ls->acc){
         nuevo->next = ls->cur;
         ls->aux = nuevo;
+        ls->acc = nuevo;
+        ls->cur = nuevo;
     }else{
         ls->aux->next = nuevo;
         nuevo->next = ls->cur;
