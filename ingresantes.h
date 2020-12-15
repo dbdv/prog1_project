@@ -87,13 +87,9 @@ int mostrar_estadoIngreso(ingresante ingre){
     return ingre.estIngreso;
 }
 
-int* mostrar_idCarreras(ingresante ingre){
-
-    int i, *aux=(int*)malloc(sizeof(int)*3);
-    for(i=0; i<3; i++)
-        aux[i] = ingre.ID_carr[i];
-    return aux;
-    /*Despues cuando queremos ver los ID cargados usamos una iteracion*/
+int mostrar_idCarreras(ingresante ingre, int i){
+    int id = ingre.ID_carr[i];
+    return id;
 }
 
 /*FUNCIONES MODIFICAR*/

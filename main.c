@@ -210,9 +210,9 @@ int main()
                 while(!isOos(lista))
                 {
                     ingre = copyy(lista);
-                    if(aux == mostrar_dni(ingre))
+                    if(auxD == mostrar_dni(ingre))
                     {
-                        if((*mostrar_idCarreras(ingre)) == 0)
+                        if(mostrar_idCarreras(ingre, 0) == 0)
                             printf("Este ingresante no está inscripto en ninguna carrera.\n");
                         else
                             suppres(&lista);
@@ -341,7 +341,6 @@ int main()
             carga_estado(&ingre, 2);
         else
             carga_estado(&ingre, 1);
-    }
     }
 
     anotar_carrera(carreras, &ingre);
@@ -473,6 +472,7 @@ int main()
         printf("DNI: %ld\n", mostrar_dni(ingre));
         printf("Celular: %s\n", mostrar_cel(ingre));
         printf("Estado: ");
+        estado = mostrar_estado(ingre);
         switch(estado)
         {
         case 1:
@@ -493,7 +493,7 @@ int main()
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            aux1 = mostrar_idCarreras(ingre)[i];
+            aux1 = mostrar_idCarreras(ingre, i);
             if( aux1 > 0 && aux1 < 24)
                 printf("\t%s.\n", carreras[aux1]);
         }
@@ -522,7 +522,7 @@ int main()
     {
         for(i=0; i<3; i++)
         {
-            if(mostrar_idCarreras(copyy(l))[i] == aux && mostrar_estado(copyy(l)) == 3)
+            if(mostrar_idCarreras(copyy(l), i) == aux && mostrar_estado(copyy(l)) == 3)
              {
                 printf("Nombre: %s\n", mostrar_nom(copyy(l)));
                 printf("Apellido: %s\n", mostrar_ape(copyy(l)));
@@ -545,7 +545,7 @@ int main()
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            aux1 = *(mostrar_idCarreras(copyy(lista))+i);
+            aux1 = mostrar_idCarreras(copyy(lista), i);
             if( aux1 > 0 || aux1 < 24)
                 printf("\t%s.\n", carreras[aux1]);
         }
@@ -607,7 +607,7 @@ int main()
 
 /*G*/void inscribirOtra(list_ingresante *lista, char *carreras[], ingresante ingre)
 {
-    int option, id, i, *carr = mostrar_idCarreras(ingre);
+    int option, id, i, carr;
 
     printf("\tINSCRIPCION A CARRERAS.\n");
     printf("1.Carreras de pregrado\t2.Carreras de grado.\t0.Salir del programa.\n");
@@ -636,11 +636,11 @@ int main()
             printf("No es un ID v%clido. Intente nuevamente.\n",162);
         else if(id == 10)
             printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
-        else if(id == carr[0] || id == carr[1] || id == carr[2])
+        else if(id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2))
             printf("Ya se ha inscripto en esa carrera.\n");
-    }while(id<0 || id > 24 || id == 10 || id == 11 || id == carr[0] || id == carr[1] || id == carr[2]);
+    }while(id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2));
 
-    if(carr[1] == 0)
+    if(mostrar_idCarreras(ingre, 1) == 0)
         carga_carrera(&ingre, id, 1);
     else
         carga_carrera(&ingre, id, 2);
@@ -661,11 +661,11 @@ int main()
         {
             printf("\nLas carreras en la que esta inscripto el ingresante con dni %ld:\n",aux);
                for(i = 0; i < 3; i++)
-        {
-            aux1 = *(mostrar_idCarreras(ingre)+i);
-            if( aux1 > 0 || aux1 < 24)
-                printf("\t%s.\n", carreras[aux1]);
-        }
+                {
+                    aux1 = mostrar_idCarreras(ingre, i);
+                    if( aux1 > 0 || aux1 < 24)
+                    printf("\t%s.\n", carreras[aux1]);
+                }
         do{
         printf("¿Elija opcion:\n1-Salir de una carrera\n2-Salir de todas las carreras\n");
         }while(op<1 || op>2);
@@ -678,12 +678,12 @@ int main()
         }else{
                 printf("Ingrese ID de carrera\n");
                 scanf("%d",&a);
-                if(a==mostrar_idCarreras(ingre)[0]){
-                    carga_carrera(&ingre,mostrar_idCarreras(ingre)[1],0);
-                    carga_carrera(&ingre,mostrar_idCarreras(ingre)[2],1);
+                if(a == mostrar_idCarreras(ingre, 0)){
+                    carga_carrera(&ingre,mostrar_idCarreras(ingre, 1),0);
+                    carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
                 }else{
-                            if(a==mostrar_idCarreras(ingre)[1]){
-                             carga_carrera(&ingre,mostrar_idCarreras(ingre)[2],1);
+                            if(a == mostrar_idCarreras(ingre, 1)){
+                             carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
                              carga_carrera(&ingre,0,2);
                 }else carga_carrera(&ingre,0,2);
         }
@@ -738,7 +738,7 @@ int main()
         for(i=0; i<3; i++)
         {
     /*Ver si coinciden las carreras y si son aspirantes*/
-    if(mostrar_idCarreras(ingre)[i] == c && mostrar_estado(ingre) == 2)
+    if(mostrar_idCarreras(ingre, i) == c && mostrar_estado(ingre) == 2)
             contador++;
     }
     forwardd(&lista);
@@ -754,7 +754,7 @@ int main()
     }else{
             ingre=copyy(lista);
 
-        if( (mostrar_idCarreras(ingre)[0] == id || mostrar_idCarreras(ingre)[1]==id || mostrar_idCarreras(ingre)[2]==id) && mostrar_estadoIngreso(ingre)==1){
+        if( (mostrar_idCarreras(ingre, 0) == id || mostrar_idCarreras(ingre, 1)==id || mostrar_idCarreras(ingre, 2)==id) && mostrar_estadoIngreso(ingre)==1){
 
 
         printf("Nombre: %s\n", mostrar_nom(ingre));
@@ -776,7 +776,6 @@ int main()
 /*K*/void guardarTFA(list_ingresante lista, char *carreras[])
 {
     FILE *tfa = fopen("TFA.txt", "w");
-    int *id = mostrar_idCarreras;
     ingresante aux = copyy(lista);
 
     reset(&lista);
@@ -785,12 +784,12 @@ int main()
         if(!mostrar_estadoIngreso(aux))
         {
             fprintf(tfa, "%s\n%s\n%ld\n%s\nCarrera\s", mostrar_nom(aux), mostrar_ape(aux), mostrar_dni(aux), mostrar_cel(aux));
-            if(id[0] > 0 &&  id[0] < 23)
-                fprintf(tfa, "\t%s\n", carreras[id[0]]);
-            if(id[1] > 0 &&  id[1] < 23)
-                fprintf(tfa, "\t%s\n", carreras[id[1]]);
-            if(id[2] > 0 &&  id[2] < 23)
-                fprintf(tfa, "\t%s\n", carreras[id[2]]);
+            if(mostrar_idCarreras(aux, 0) > 0 &&  mostrar_idCarreras(aux, 0) < 23)
+                fprintf(tfa, "\t%s\n", carreras[mostrar_idCarreras(aux, 0)]);
+            if(mostrar_idCarreras(aux, 1) > 0 &&  mostrar_idCarreras(aux, 1) < 23)
+                fprintf(tfa, "\t%s\n", carreras[mostrar_idCarreras(aux, 1)]);
+            if(mostrar_idCarreras(aux, 2) > 0 &&  mostrar_idCarreras(aux, 2) < 23)
+                fprintf(tfa, "\t%s\n", carreras[mostrar_idCarreras(aux, 2)]);
 
         }
     }
