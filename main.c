@@ -663,9 +663,10 @@ int main()
     int i,aux1,op,a;
     reset(lista);
 
-    while(!isOos(*lista)){
+    while(!isOos(*lista) && aux != mostrar_dni(ingre))
+    {
 
-    ingre = copyy(*lista);
+        ingre = copyy(*lista);
         if(aux == mostrar_dni(ingre))
         {
             printf("\nLas carreras en la que esta inscripto el ingresante con dni %ld:\n",aux);
@@ -680,14 +681,14 @@ int main()
             printf("Elija opcion:\n<1> Salir de una carrera\t<2> Salir de todas las carreras\n");
             scanf("%i", &op);
         }while(op != 1 && op != 2);
-        printf("Hola\n");//------------------------------------------------------------------------------
 
 
         if(op==2){
             carga_carrera(&ingre,0,0);
             carga_carrera(&ingre,0,1);
             carga_carrera(&ingre,0,2);
-        }else
+        }
+        else
         {
             printf("Ingrese ID de carrera\n");
             scanf("%d",&a);
@@ -868,10 +869,5 @@ int main()
             insertt(lista, ingre);
            }
         }
-        ingresante aux1 = copyy(*lista);
-        forwardd(lista);
-        ingresante aux2 = copyy(*lista);
-
-        printf("%s\n%s\n", mostrar_nom(aux1), mostrar_nom(aux2));
     }
 
