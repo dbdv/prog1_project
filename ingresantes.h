@@ -36,7 +36,7 @@ void carga_ingreso(ingresante* ingre, int ing){
 }
 
 void carga_carrera(ingresante* ingre, int id, int i){
-    ingre->ID_carr[i] = id;
+     ingre->ID_carr[i] = id;
 }
 
 void carga_ape(ingresante* ingre, char ape[]){

@@ -266,6 +266,7 @@ int main()
     gets(aux);
     carga_nom(&ingre,aux);
 
+
     printf("Ingrese su apellido: ");
     fflush(stdin);
     gets(aux);
@@ -303,7 +304,6 @@ int main()
         tel[e]=num[e-strlen(codPais)-strlen(codArea)-1];
     }
     carga_cel(&ingre,tel);
-
 
     do
     {
@@ -371,27 +371,33 @@ int main()
                 printf("No seleccion%c una opci%cn v%clida. Intente nuevamente.\n",162,162,160);
         }while(option < 0 || option >2);
         if(option == 1)
+        {
+            for(i=0; i<=10; i++)
+                printf("%s.\n", carreras[i]);
+            do
             {
-                for(i=0; i<=10; i++)
-                    printf("%s.\n", carreras[i]);
-            }
+                printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                scanf("%i", &id);
+                if(id<1 || id > 10)
+                    printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                else if(id == 10)
+                    printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+            }while(id < 0 || id > 9);
+        }
         else if(option == 2)
         {
             for(i=11; i<25; i++)
                 printf("%s.\n",carreras[i]);
+            do
+            {
+                printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                scanf("%i", &id);
+                if(id<12 || id > 24 )
+                    printf("No es un ID v%clido. Intente nuevamente.\n",162);
+            }while(id<12 || id > 24);
         }
 
-        printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
-        do
-        {
-            scanf("%i", &id);
-            if(id<0 || id > 23)
-                printf("No es un ID v%clido. Intente nuevamente.\n",162);
-            else if(id == 10)
-                printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
-        }while(id<0 || id > 24 || id == 10);
-
-        carga_carrera(&ingre, id, j);
+        carga_carrera(ingre, id, j);
     }
 }
 
