@@ -29,25 +29,24 @@ u->163
 
 /*G*/void inscribirOtra(list_ingresante *lista, char *carreras[], ingresante ingre);
 
-/*H*/void darBaja(list_ingresante *lista,long aux,ingresante ingre,char *carreras[]);
+/*H*/void darBaja(list_ingresante *lista,long aux, char *carreras[]);
 
 /*I*/void cant_aspirantesXcarrera(char *carreras[],list_ingresante lista);
 
-/*J*/void mostrarAprobaronIngreso(list_ingresante lista,int id,ingresante ingre);
+/*J*/void mostrarAprobaronIngreso(list_ingresante lista,int id);
 
 /*K*/void guardarTFA(list_ingresante lista, char *carreras[]);
 
-/*L*/void precarga(list_ingresante *lista,  FILE *arch_ingresantes);
+/*L*/void precarga(list_ingresante *lista);
 
 int main()
 {
     int option, i, suboption, ad, n;
     long auxD;
-    char *carreras[25], aux[20];
+    char *carreras[25];
     ingresante ingre;
     list_ingresante lista;
     FILE *arch_carreras = fopen("carreras.txt", "r");
-    FILE *arch_ingresantes = fopen("ingresantes.txt", "r");
 
     if(arch_carreras == NULL )
     {
@@ -97,7 +96,7 @@ int main()
                 printf("La lista se encuentra llena, no puede cargar mas usuarios.\n");
             else
             {
-                printf("Cantidad a cargar: ");
+                printf("\nCantidad a cargar: ");
                 scanf("%i", &n);
                 for(i = 0; i < n; i++)
                 {
@@ -105,6 +104,7 @@ int main()
                         printf("Se ha llenado la lista, pudo cargar %i ingresantes.\n", i);
                     else
                     {
+                        printf("\n");
                         cargar_usuarios(&lista, carreras);
                         forwardd(&lista);
                     }
@@ -116,66 +116,88 @@ int main()
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+            {
+                printf("\n");
                 mostrarBuscado(&lista, carreras);
+            }
             break;
         case 3:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+            {
+                printf("\n");
                 ingresantesDe(carreras, lista);
+            }
             break;
         case 4:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+            {
+                printf("\n");
                 verCargados(lista, carreras);
+            }
             break;
         case 5:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+            {
+                printf("\n");
                 cambiarIngreso(&lista);
+            }
             break;
         case 6:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+            {
+                printf("\n");
                 cant_aspirantesXcarrera(carreras, lista);
+            }
             break;
         case 7:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else{
                 for(i=0; i <= 24; i++ )
-            printf("%s.\n", carreras[i]);
-            do
-            {
-                printf("Ingrese el ID de la carrera de la cual quiere ver el listado de ingresantes que aprobaron el ingreso: ");
-                scanf("%i",&ad);
-                if(ad <0 || ad > 22)
-                    printf("Debe ingresar un ID valido.\n");
-            }while(ad <0 || ad > 22);
-            reset(&lista);
-            mostrarAprobaronIngreso(lista,ad,ingre);
-            }
+                    printf("%s.\n", carreras[i]);
+                do
+                {
+                    printf("Ingrese el ID de la carrera de la cual quiere ver el listado de ingresantes que aprobaron el ingreso: ");
+                    scanf("%i", &ad);
+                    if(ad <1 || ad > 24 || ad == 11)
+                        printf("Debe ingresar un ID valido.\n");
+                    if( ad == 10)
+                        printf("Esta carrera no recibe ingresantes en a%cos impar.\n", 164);
+                }while(ad <1 || ad > 24 || ad == 10 || ad == 11);
+                reset(&lista);
+                printf("\n");
+                mostrarAprobaronIngreso(lista, ad);
+                }
             break;
         case 8:
             if(isFull())
                 printf("La lista se encuentra llena.\n");
             else
             {
-                precarga(&lista, arch_ingresantes);
-                printf("Carga completa.\n");
+                precarga(&lista);
+                printf("\nCarga completa.\n");
             }
             break;
         case 9:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
+            {
                 guardarTFA(lista, carreras);
+                printf("\nGuardado completo.\n");
+            }
             break;
         case 0:
             printf("Hasta luego!\n\n");
+            system("cls");
         }
         }while(option != 0);
     }
@@ -217,11 +239,13 @@ int main()
                             printf("Este ingresante no está inscripto en ninguna carrera.\n");
                         else
                             suppres(&lista);
-                    }else
+                    }
+                    else
                     {
                         forwardd(&lista);
                     }
                 }
+
                 inscribirOtra(&lista, carreras, ingre);
             }
             break;
@@ -233,7 +257,7 @@ int main()
                 printf("Ingrese DNI de ingresante:");
                 scanf("%ld",&auxD);
                 }while(auxD<10000000 || auxD>99999999);
-            darBaja(&lista,auxD,ingre,carreras);
+            darBaja(&lista,auxD, carreras);
             }
             break;
         case 0:
@@ -248,7 +272,6 @@ int main()
 
 
     free((void*)carreras);
-    fclose(arch_ingresantes);
     fclose(arch_carreras);
 
     return 0;
@@ -258,8 +281,8 @@ int main()
 /*A*/void cargar_usuarios(list_ingresante *lista, char *carreras[])
 {
     long dni;
-    int estado, au, papeles;
-    char aux[15], codPais[4], codArea[7], num[9], tel[20];
+    int estado, papeles;
+    char aux[15], tel[20];
     ingresante ingre;
 
     init(&ingre);
@@ -274,37 +297,9 @@ int main()
     gets(aux);
     carga_ape(&ingre,aux);
 
-    printf("\nIngrese celular de contacto\n");
-    do{
-    printf("\nCodigo de pais:");
+    printf("Ingrese celular de contacto: ");
     fflush(stdin);
-    gets(codPais);
-    }while(codPais[0]<0);
-
-    do{
-    printf("\nCodigo de ciudad:");
-    fflush(stdin);
-    gets(codArea);
-    }while(codArea[0]<0);
-
- do{
-    printf("\nNumero de telefono:");
-    fflush(stdin);
-    gets(num);
-    }while(num[0]<0);
-
-    strcpy(tel,"+");
-    int e;
-    for(e=1;e<(strlen(codPais))+1;e++){
-        tel[e]=codPais[e-1];
-    }
-
-    for(e=strlen(codPais)+1;e<(strlen(codArea))+strlen(codPais)+1;e++){
-        tel[e]=codArea[e-strlen(codPais)-1];
-        }
-    for(e=strlen(codPais)+strlen(codArea)+1;e<(strlen(codArea))+strlen(codPais)+strlen(num)+1;e++){
-        tel[e]=num[e-strlen(codPais)-strlen(codArea)-1];
-    }
+    gets(tel);
     carga_cel(&ingre,tel);
 
     do
@@ -334,21 +329,22 @@ int main()
         carga_ingreso(&ingre,0);
         do
         {
-            printf("t<1> Papeles completos.\t<2> Papeles incompletos.\n", 162);
+            printf("<1> Papeles incompletos.\t<2> Papeles completos.\n");
             scanf("%i", &papeles);
             if(papeles < 1 || papeles > 2)
                 printf("Debe elegir una de las opciones que se muestran.\n");
         }while(papeles < 1 || papeles > 2);
         if(papeles == 1)
-            carga_estado(&ingre, 2);
-        else
             carga_estado(&ingre, 1);
+        else
+            carga_estado(&ingre, 2);
     }
 
     anotar_carrera(carreras, &ingre);
 
     insertt(lista, ingre);
 
+    system("cls");
 }
 
 /*extra*/void anotar_carrera(char *carreras[], ingresante *ingre)
@@ -365,7 +361,7 @@ int main()
     }while(cant < 0 || cant > 3);
 
     for(j=0; j < cant; j++){
-        printf("1.Carreras de pregrado\t2.Carreras de grado.\t0.Salir del programa.\n");
+        printf("1.Carreras de pregrado\t2.Carreras de grado.\n");
         do
         {
             scanf("%i", &option);
@@ -376,27 +372,84 @@ int main()
         {
             for(i=0; i<=10; i++)
                 printf("%s.\n", carreras[i]);
-            do
+            switch(j)
             {
-                printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
-                scanf("%i", &id);
-                if(id<1 || id > 10)
-                    printf("No es un ID v%clido. Intente nuevamente.\n",162);
-                else if(id == 10)
-                    printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
-            }while(id < 0 || id > 9);
+
+            case 0:
+                do
+                {
+                    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                    scanf("%i", &id);
+                    if(id<1 || id > 10)
+                        printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                    else if(id == 10)
+                        printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+                }while(id < 0 || id > 9);
+                break;
+                case 1:
+                do
+                {
+                    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                    scanf("%i", &id);
+                    if(id<1 || id > 10)
+                        printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                    else if(id == 10)
+                        printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+                    else if(id == mostrar_idCarreras(*ingre, 0))
+                        printf("Ya se ha inscripto en esa carrera.\n");
+                }while(id < 0 || id > 9 || id == mostrar_idCarreras(*ingre, 0));
+                break;
+                case 2:
+                do
+                {
+                    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                    scanf("%i", &id);
+                    if(id<1 || id > 10)
+                        printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                    else if(id == 10)
+                        printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+                    else if(id == mostrar_idCarreras(*ingre, 0) || id == mostrar_idCarreras(*ingre, 0))
+                        printf("Ya se ha inscripto en esa carrera.\n");
+                }while(id < 0 || id > 9 || id == mostrar_idCarreras(*ingre, 0) || id == mostrar_idCarreras(*ingre, 1));
+            }
         }
         else if(option == 2)
         {
             for(i=11; i<25; i++)
                 printf("%s.\n",carreras[i]);
-            do
+            switch(j)
             {
-                printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
-                scanf("%i", &id);
-                if(id<12 || id > 24 )
-                    printf("No es un ID v%clido. Intente nuevamente.\n",162);
-            }while(id<12 || id > 24);
+                case 0:
+                do
+                {
+                    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                    scanf("%i", &id);
+                    if(id<12 || id > 24 )
+                        printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                }while(id<12 || id > 24);
+            break;
+                case 1:
+                do
+                {
+                    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                    scanf("%i", &id);
+                    if(id<12 || id > 24 )
+                        printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                    else if(id == mostrar_idCarreras(*ingre, 0))
+                        printf("Ya se ha inscripto en esa carrera.\n");
+                }while(id<12 || id > 24 || id == mostrar_idCarreras(*ingre, 0));
+                break;
+                case 2:
+                do
+                {
+                    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+                    scanf("%i", &id);
+                    if(id<12 || id > 24 )
+                        printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                    else if(id == mostrar_idCarreras(*ingre, 0) || id == mostrar_idCarreras(*ingre, 1))
+                        printf("Ya se ha inscripto en esa carrera.\n");
+                }while(id<12 || id > 24 || id == mostrar_idCarreras(*ingre, 0) || id == mostrar_idCarreras(*ingre, 1));
+            }
         }
 
         carga_carrera(ingre, id, j);
@@ -411,7 +464,7 @@ int main()
 
     do
     {
-        printf("<1> Buscar por DNI.\t<2> Buscar por ID.\n");
+        printf("\n<1> Buscar por DNI.\t<2> Buscar por ID.\n");
         scanf("%i", &option);
         if(option != 1 && option != 2)
             printf("Debe ingresar una de las opciones que se muestran.\n");
@@ -475,6 +528,7 @@ int main()
     if(verIngresante(lista))
     {
         ingre = copyy(*lista);
+        printf("-------------------------\n");
         printf("Nombre: %s\n", mostrar_nom(ingre));
         printf("Apellido: %s\n", mostrar_ape(ingre));
         printf("DNI: %ld\n", mostrar_dni(ingre));
@@ -501,7 +555,8 @@ int main()
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            printf("%s",carreras[mostrar_idCarreras(ingre, i)]);
+            if(mostrar_idCarreras(ingre, i) != 0)
+                printf("%s.\n",carreras[mostrar_idCarreras(ingre, i)]);
         }
     }
     else
@@ -511,19 +566,18 @@ int main()
 
 /*D*/void ingresantesDe(char *carreras[], list_ingresante l)
 {
-    int i, aux;
+    int i, aux, contador = 0;
     for(i=0; i <= 24; i++ ){
         printf("%s\n", carreras[i]);
     }
     do
     {
-        printf("Ingrese el ID de la carrera de la cual quiere ver el listado de ingresantes: ");
+        printf("\nIngrese el ID de la carrera de la cual quiere ver el listado de ingresantes: ");
         scanf("%i",&aux);
         if(aux <0 || aux > 22)
             printf("Debe ingresar un ID valido.\n");
     }while(aux <0 || aux > 22);
 
-    printf("Los ingresantes de la carrera %s son:\n", carreras[aux]);
     reset(&l);
     while(!isOos(l))
     {
@@ -531,24 +585,43 @@ int main()
         {
             if(mostrar_idCarreras(copyy(l), i) == aux && mostrar_estado(copyy(l)) == 3)
              {
-                printf("Nombre: %s\n", mostrar_nom(copyy(l)));
-                printf("Apellido: %s\n", mostrar_ape(copyy(l)));
-                printf("DNI: %ld\n", mostrar_dni(copyy(l)));
-                printf("Celular: %s\n", mostrar_cel(copyy(l)));
+                contador++;
              }
         }
         forwardd(&l);
+
     }
+    if(contador != 0)
+    {
+        printf("Hay %i ingresantes en la carrera %s.\nLos ingresantes son:\n", contador, carreras[aux]);
+        reset(&l);
+        while(!isOos(l))
+        {
+            for(i=0; i<3; i++)
+            {
+                if(mostrar_idCarreras(copyy(l), i) == aux && mostrar_estado(copyy(l)) == 3)
+                {
+                    printf("Nombre: %s\n", mostrar_nom(copyy(l)));
+                    printf("Apellido: %s\n", mostrar_ape(copyy(l)));
+                    printf("DNI: %ld\n", mostrar_dni(copyy(l)));
+                    printf("Celular: %s\n", mostrar_cel(copyy(l)));
+                }
+            }
+            forwardd(&l);
+        }
+    }else
+        printf("No hay ingresantes en esta carrera.\n");
 }
 
 /*E*/void verCargados(list_ingresante lista, char *carreras[])
 {
-    int i, aux1;
+    int i;
     reset(&lista);
     ingresante ingre;
     while(!isOos(lista))
     {
         ingre=copyy(lista);
+        printf("-----------------------\n");
         printf("Nro de inscripci%cn: %i.\nNombre: %s.\nApellido: %s.\nDNI: %ld.\n", 162, mostrar_n_inscrip(ingre), mostrar_nom(ingre), mostrar_ape(ingre), mostrar_dni(ingre));
         printf("Celular: %s.\n",mostrar_cel(ingre));
         printf("Carrera/s:\n");
@@ -616,51 +689,63 @@ int main()
 
 /*G*/void inscribirOtra(list_ingresante *lista, char *carreras[], ingresante ingre)
 {
-    int option, id, i, carr;
+    int option, id, i;
 
-    printf("\tINSCRIPCION A CARRERAS.\n");
-    printf("1.Carreras de pregrado\t2.Carreras de grado.\t0.Salir del programa.\n");
-    do
-    {
-        scanf("%i", &option);
-        if(option <0 || option >2)
-            printf("No seleccion%c una opci%cn v%clida. Intente nuevamente.\n",162,162,160);
-    }while(option < 0 || option >2);
-    if(option == 1)
+    if(mostrar_idCarreras(ingre, 1) != 0 && mostrar_idCarreras(ingre, 2) != 0)
+        printf("\nYa se ha inscripto en 3 carreras.\n");
+    else{
+
+        printf("\tINSCRIPCION A CARRERAS.\n");
+        printf("<1> Carreras de pregrado\t<2> Carreras de grado.\n");
+        do
         {
-            for(i=0; i<=10; i++)
-                printf("%s.\n", carreras[i]);
+            scanf("%i", &option);
+            if(option <1 || option >2)
+            {
+                printf("No seleccion%c una opci%cn v%clida. Intente nuevamente.\n",162,162,160);
+            }
+        }while(option < 1 || option >2);
+
+        if(option == 1)
+        {
+                for(i=0; i<=10; i++)
+                    printf("%s.\n", carreras[i]);
+                printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+            do
+            {
+                scanf("%i", &id);
+                if(id<1 || id > 10)
+                    printf("No es un ID v%clido. Intente nuevamente.\n",162);
+                else if(id == 10)
+                    printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+                else if(id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2))
+                    printf("Ya se ha inscripto en esa carrera.\nIntente nuevamente.\nID:");
+            }while(id<1 || id > 9 || id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2));
         }
-    else if(option == 2)
-    {
-        for(i=11; i<=25; i++)
-            printf("%s.\n",carreras[i]);
+        else if(option == 2)
+        {
+            for(i=11; i<=25; i++)
+                printf("%s.\n",carreras[i]);
+            printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+            do
+            {
+                scanf("%i", &id);
+                if(id < 12 || id > 24)
+                    printf("No es un ID v%clido. Intente nuevamente.\n", 162);
+                else if(id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2))
+                    printf("Ya se ha inscripto en esa carrera.\nIntente nuevamente.\nID:");
+            }while(id<12 || id > 24 || id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2));
+        }
+
+        insertt(lista, ingre);
     }
-
-    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
-    do
-    {
-        scanf("%i", &id);
-        if(id<0 || id > 23 || id == 11)
-            printf("No es un ID v%clido. Intente nuevamente.\n",162);
-        else if(id == 10)
-            printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
-        else if(id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2))
-            printf("Ya se ha inscripto en esa carrera.\n");
-    }while(id == mostrar_idCarreras(ingre, 0) || id == mostrar_idCarreras(ingre, 1) || id == mostrar_idCarreras(ingre, 2));
-
-    if(mostrar_idCarreras(ingre, 1) == 0)
-        carga_carrera(&ingre, id, 1);
-    else
-        carga_carrera(&ingre, id, 2);
-
-    insertt(lista, ingre);
 
 }
 
-/*H*/void darBaja(list_ingresante *lista,long aux,ingresante ingre,char *carreras[])
+/*H*/void darBaja(list_ingresante *lista,long aux,char *carreras[])
 {
     int i,aux1,op,a;
+    ingresante ingre;
     reset(lista);
 
     while(!isOos(*lista) && aux != mostrar_dni(ingre))
@@ -673,7 +758,7 @@ int main()
                for(i = 0; i < 3; i++)
                 {
                     aux1 = mostrar_idCarreras(ingre, i);
-                    if( aux1 > 0 || aux1 < 24)
+                    if( aux1 > 0 && aux1 < 24 )
                         printf("\t%s.\n", carreras[aux1]);
                 }
         do
@@ -684,26 +769,27 @@ int main()
 
 
         if(op==2){
-            carga_carrera(&ingre,0,0);
-            carga_carrera(&ingre,0,1);
-            carga_carrera(&ingre,0,2);
+                    suppres(lista);
         }
         else
         {
+            suppres(lista);
             printf("Ingrese ID de carrera\n");
             scanf("%d",&a);
             if(a == mostrar_idCarreras(ingre, 0))
             {
-                carga_carrera(&ingre,mostrar_idCarreras(ingre, 1),0);
-                carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
+                mod_carr(&ingre, 0, mostrar_idCarreras(ingre, 1));
+                mod_carr(&ingre, 1, mostrar_idCarreras(ingre, 2));
+                mod_carr(&ingre,2,0);
             }
             else if(a == mostrar_idCarreras(ingre, 1))
             {
-                carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
-                carga_carrera(&ingre,0,2);
+                mod_carr(&ingre, 1, mostrar_idCarreras(ingre, 2));
+                mod_carr(&ingre, 2, 0);
             }
             else
-                carga_carrera(&ingre,0,2);
+                mod_carr(&ingre,2,0);
+            insertt(lista, ingre);
         }
     }
     else
@@ -717,14 +803,14 @@ int main()
     int t,c,i;
         do{
             printf("\nIngrese tipo de carrera:\n");
-            printf("1.Carreras de pregrado\t2.Carreras de grado\n");
+            printf("<1> Carreras de pregrado\t<2> Carreras de grado\n");
             scanf("%d",&t);
         }while(t<1 || t>2);
 
         if(t == 1)
         {
             for(i=0; i<=10; i++)
-                printf("%s\n", carreras[i]);
+                printf("%s.\n", carreras[i]);
             do
             {
                 printf("\nIngrese ID de carrera:");
@@ -735,7 +821,7 @@ int main()
         else if(t == 2)
         {
             for(i=11; i<=25; i++)
-                printf("%s",carreras[i]);
+                printf("%s.\n",carreras[i]);
             do
             {
                 printf("\nIngrese ID de carrera:");
@@ -747,7 +833,6 @@ int main()
     while(!isOos(lista))
     {
         ingre = copyy(lista);
-        int a;
 
         for(i=0; i<3; i++)
         {
@@ -759,115 +844,119 @@ int main()
     forwardd(&lista);
     }
 
-    printf("Se hallaron %d aspirantes.",contador);
+    printf("\nSe hallaron %d aspirantes.\n",contador);
 }
 
-/*J*/void mostrarAprobaronIngreso(list_ingresante lista,int id,ingresante ingre)
+/*J*/void mostrarAprobaronIngreso(list_ingresante lista, int id)
 {
     if(isOos(lista)){
-        exit(1);
+        printf("Esos son todos.\n");
     }else{
-            ingre=copyy(lista);
 
-        if( (mostrar_idCarreras(ingre, 0) == id || mostrar_idCarreras(ingre, 1)==id || mostrar_idCarreras(ingre, 2)==id) && mostrar_estadoIngreso(ingre)==1)
+        if( (mostrar_idCarreras(copyy(lista), 0) == id || mostrar_idCarreras(copyy(lista), 1)==id || mostrar_idCarreras(copyy(lista), 2)==id) && mostrar_estadoIngreso(copyy(lista))==1)
         {
-            printf("Nombre: %s\n", mostrar_nom(ingre));
-            printf("Apellido: %s\n", mostrar_ape(ingre));
-            printf("DNI: %ld\n", mostrar_dni(ingre));
-            printf("Celular: %s\n", mostrar_cel(ingre));
+            printf("Nombre: %s\n", mostrar_nom(copyy(lista)));
+            printf("Apellido: %s\n", mostrar_ape(copyy(lista)));
+            printf("DNI: %ld\n", mostrar_dni(copyy(lista)));
+            printf("Celular: %s\n", mostrar_cel(copyy(lista)));
             printf("------------------------\n");
             forwardd(&lista);
-            mostrarAprobaronIngreso(lista, id, ingre);
+            mostrarAprobaronIngreso(lista, id);
         }
 
         else
         {
             forwardd(&lista);
-            mostrarAprobaronIngreso(lista, id, ingre);
+            mostrarAprobaronIngreso(lista, id);
         }
     }
 }
 
 /*K*/void guardarTFA(list_ingresante lista, char *carreras[])
 {
-    FILE *tfa = fopen("TFA.txt", "w");
-    ingresante aux = copyy(lista);
+    FILE *tfa = fopen("TFA.txt", "w+");
+    ingresante aux;
+
+    if(tfa == NULL)
+        printf("Error de carga.\n");
+    else{
 
     reset(&lista);
+    rewind(tfa);
     while(!isOos(lista))
     {
+        aux = copyy(lista);
         if(!mostrar_estadoIngreso(aux))
         {
-            fprintf(tfa, "%s\n%s\n%ld\n%s\nCarrera\s", mostrar_nom(aux), mostrar_ape(aux), mostrar_dni(aux), mostrar_cel(aux));
+            fprintf(tfa, "%s\n%s\n%ld\n%s\nCarrera-s", mostrar_nom(aux), mostrar_ape(aux), mostrar_dni(aux), mostrar_cel(aux));
             if(mostrar_idCarreras(aux, 0) > 0 &&  mostrar_idCarreras(aux, 0) < 23)
                 fprintf(tfa, "\t%s\n", carreras[mostrar_idCarreras(aux, 0)]);
             if(mostrar_idCarreras(aux, 1) > 0 &&  mostrar_idCarreras(aux, 1) < 23)
                 fprintf(tfa, "\t%s\n", carreras[mostrar_idCarreras(aux, 1)]);
             if(mostrar_idCarreras(aux, 2) > 0 &&  mostrar_idCarreras(aux, 2) < 23)
                 fprintf(tfa, "\t%s\n", carreras[mostrar_idCarreras(aux, 2)]);
-
+            forwardd(&lista);
         }
+        else
+            forwardd(&lista);
+    }
     }
     fclose(tfa);
 }
 
-/*L*/void precarga(list_ingresante *lista, FILE *arch_ingresantes)
+/*L*/void precarga(list_ingresante *lista)
 {
-    int estado, id, ingreso;
+     FILE *arch_ingresantes = fopen("ingresantes.txt", "r+");
+    int estado, id, id1, id2, ingreso;
     long dni;
     char nom[20], ape[20], cel[20];
     ingresante ingre;
 
     if(arch_ingresantes == NULL)
-    {
         printf("Hubo un error con la carga del archivo.\n");
-        exit(1);
-    }
     else
     {
         while(feof(arch_ingresantes) == 0 && !isFull())
         {
+            memset(nom, 0, 20);
+            memset(ape, 0, 20);
+            memset(cel, 0, 20);
             fflush(stdin);
             init(&ingre);
 
             fflush(stdin);
             fscanf(arch_ingresantes, "%[^\n] s", nom);
-            carga_nom(&ingre, nom);
-
             fflush(stdin);
             fscanf(arch_ingresantes, "%[^\n] s", ape);
-            carga_ape(&ingre, ape);
-
             fflush(stdin);
             fscanf(arch_ingresantes, "%ld", &dni);
-            carga_dni(&ingre, dni);
-
             fflush(stdin);
             fscanf(arch_ingresantes, "%s", cel);
-            carga_cel(&ingre, cel);
-
-            fflush(stdin);
-            fscanf(arch_ingresantes, "%i", &estado);
-            carga_estado(&ingre, estado);
-
             fflush(stdin);
             fscanf(arch_ingresantes, "%i", &ingreso);
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &estado);
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &id);
+             fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &id1);
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &id2);
+
+            carga_nom(&ingre, nom);
+            carga_ape(&ingre, ape);
+            carga_dni(&ingre, dni);
+            carga_cel(&ingre, cel);
             carga_ingreso(&ingre, ingreso);
-
-            fflush(stdin);
-            fscanf(arch_ingresantes, "%i", &id);
+            carga_estado(&ingre, estado);
             carga_carrera(&ingre, id, 0);
-
-            fflush(stdin);
-            fscanf(arch_ingresantes, "%i", &id);
-            carga_carrera(&ingre, id, 1);
-
-            fflush(stdin);
-            fscanf(arch_ingresantes, "%i", &id);
-            carga_carrera(&ingre, id, 2);
+            carga_carrera(&ingre, id1, 1);
+            carga_carrera(&ingre, id2, 2);
 
             insertt(lista, ingre);
+            printf("%s\n", mostrar_nom(ingre));
            }
         }
+        fclose(arch_ingresantes);
     }
 
