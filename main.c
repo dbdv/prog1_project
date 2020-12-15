@@ -31,13 +31,13 @@ u->163
 
 /*H*/void darBaja(list_ingresante *lista,long aux,ingresante ingre,char *carreras[]);
 
-/*I*/void aspirantesDe(char *carreras[],list_ingresante lista);
+/*I*/void cant_aspirantesXcarrera(char *carreras[],list_ingresante lista);
 
-/*J*/void mostrarAprobaronIngreso(char *carreras[],list_ingresante lista,int id,ingresante ingre);
+/*J*/void mostrarAprobaronIngreso(list_ingresante lista,int id,ingresante ingre);
 
 /*K*/void guardarTFA(list_ingresante lista, char *carreras[]);
 
-/*L*/void precarga(list_ingresante *lista);
+/*L*/void precarga(list_ingresante *lista,  FILE *arch_ingresantes);
 
 int main()
 {
@@ -47,6 +47,7 @@ int main()
     ingresante ingre;
     list_ingresante lista;
     FILE *arch_carreras = fopen("carreras.txt", "r");
+    FILE *arch_ingresantes = fopen("ingresantes.txt", "r");
 
     if(arch_carreras == NULL )
     {
@@ -139,14 +140,14 @@ int main()
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
-                aspirantesDe(carreras, lista);
+                cant_aspirantesXcarrera(carreras, lista);
             break;
         case 7:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else{
                 for(i=0; i <= 24; i++ )
-            printf("%s", carreras[i]);
+            printf("%s.\n", carreras[i]);
             do
             {
                 printf("Ingrese el ID de la carrera de la cual quiere ver el listado de ingresantes que aprobaron el ingreso: ");
@@ -155,7 +156,7 @@ int main()
                     printf("Debe ingresar un ID valido.\n");
             }while(ad <0 || ad > 22);
             reset(&lista);
-            mostrarAprobaronIngreso(carreras,lista,ad,ingre);
+            mostrarAprobaronIngreso(lista,ad,ingre);
             }
             break;
         case 8:
@@ -163,7 +164,7 @@ int main()
                 printf("La lista se encuentra llena.\n");
             else
             {
-                precarga(&lista);
+                precarga(&lista, arch_ingresantes);
                 printf("Carga completa.\n");
             }
             break;
@@ -203,7 +204,7 @@ int main()
                     printf("Ingrese el DNI del ingresante: ");
                     scanf("%ld", &auxD);
                     if(auxD < 10000000 || auxD > 99999999)
-                    printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
+                        printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
                 }while(auxD < 10000000 || auxD > 99999999);
 
                 reset(&lista);
@@ -230,7 +231,7 @@ int main()
             else{
                 do{
                 printf("Ingrese DNI de ingresante:");
-                scanf("%d",&auxD);
+                scanf("%ld",&auxD);
                 }while(auxD<10000000 || auxD>99999999);
             darBaja(&lista,auxD,ingre,carreras);
             }
@@ -247,6 +248,7 @@ int main()
 
 
     free((void*)carreras);
+    fclose(arch_ingresantes);
     fclose(arch_carreras);
 
     return 0;
@@ -467,7 +469,7 @@ int main()
 
 /*C*/void mostrarBuscado(list_ingresante *lista, char* carreras[])
 {
-    int  i, aux1, estado;
+    int  i, estado;
     ingresante ingre;
 
     if(verIngresante(lista))
@@ -499,9 +501,7 @@ int main()
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            aux1 = mostrar_idCarreras(ingre, i);
-            if( aux1 > 0 && aux1 < 24)
-                printf("\t%s.\n", carreras[aux1]);
+            printf("%s",carreras[mostrar_idCarreras(ingre, i)]);
         }
     }
     else
@@ -512,8 +512,9 @@ int main()
 /*D*/void ingresantesDe(char *carreras[], list_ingresante l)
 {
     int i, aux;
-    for(i=0; i <= 24; i++ )
-        printf("%s", carreras[i]);
+    for(i=0; i <= 24; i++ ){
+        printf("%s\n", carreras[i]);
+    }
     do
     {
         printf("Ingrese el ID de la carrera de la cual quiere ver el listado de ingresantes: ");
@@ -544,16 +545,18 @@ int main()
 {
     int i, aux1;
     reset(&lista);
+    ingresante ingre;
     while(!isOos(lista))
     {
-        printf("Nombre: %s.\nApellido: %s.\nDNI: %ld.\n", mostrar_nom(copyy(lista)), mostrar_ape(copyy(lista)), mostrar_dni(copyy(lista)));
-        printf("Celular: %s.\n",mostrar_cel(copyy(lista)));
+        ingre=copyy(lista);
+        printf("Nro de inscripci%cn: %i.\nNombre: %s.\nApellido: %s.\nDNI: %ld.\n", 162, mostrar_n_inscrip(ingre), mostrar_nom(ingre), mostrar_ape(ingre), mostrar_dni(ingre));
+        printf("Celular: %s.\n",mostrar_cel(ingre));
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            aux1 = mostrar_idCarreras(copyy(lista), i);
-            if( aux1 > 0 || aux1 < 24)
-                printf("\t%s.\n", carreras[aux1]);
+        if(mostrar_idCarreras(ingre, i)!=0){
+         printf("%s\n",carreras[mostrar_idCarreras(ingre, i)]);
+            }
         }
         forwardd(&lista);
     }
@@ -574,9 +577,9 @@ int main()
 
                 do
                 {
-                    printf("<1> Ingreso aprobado.\t<2> Ingreso desaprobado.\n");
+                    printf("<1> Ingreso aprobado.\t<0> Ingreso desaprobado.\n");
                     scanf("%i", &aux);
-                }while(aux != 1 && aux !=2);
+                }while(aux != 1 && aux !=0);
 
                 reset(lista);
                 while(!isOos(*lista) && auxD != mostrar_dni(ingre))
@@ -588,7 +591,7 @@ int main()
                         mod_estIngreso(&ingre, aux);
                         mod_estado(&ingre, 3);
                     }
-                    else if(auxD == mostrar_dni(ingre) && aux ==2)
+                    else if(auxD == mostrar_dni(ingre) && aux ==0)
                     {
                         suppres(lista);
                         mod_estIngreso(&ingre, aux);
@@ -599,9 +602,9 @@ int main()
                         }while(papeles != 1 && papeles != 2);
 
                         if(papeles == 1)
-                            mod_estado(&ingre, 2);
+                            mod_estado(&ingre, 1);
                         if(papeles == 2)
-                            mod_estIngreso(&ingre, 1);
+                            mod_estado(&ingre, 2);
                     }
                     else
                     {
@@ -626,12 +629,12 @@ int main()
     if(option == 1)
         {
             for(i=0; i<=10; i++)
-                printf("%s", carreras[i]);
+                printf("%s.\n", carreras[i]);
         }
     else if(option == 2)
     {
         for(i=11; i<=25; i++)
-            printf("%s",carreras[i]);
+            printf("%s.\n",carreras[i]);
     }
 
     printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
@@ -681,101 +684,103 @@ int main()
             carga_carrera(&ingre,0,0);
             carga_carrera(&ingre,0,1);
             carga_carrera(&ingre,0,2);
-        }else{
-                printf("Ingrese ID de carrera\n");
-                scanf("%d",&a);
-                if(a == mostrar_idCarreras(ingre, 0)){
-                    carga_carrera(&ingre,mostrar_idCarreras(ingre, 1),0);
-                    carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
-                }else{
-                            if(a == mostrar_idCarreras(ingre, 1)){
-                             carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
-                             carga_carrera(&ingre,0,2);
-                }else carga_carrera(&ingre,0,2);
-        }
-
-                }
-        }
-        else
+        }else
         {
-            forwardd(lista);
+            printf("Ingrese ID de carrera\n");
+            scanf("%d",&a);
+            if(a == mostrar_idCarreras(ingre, 0))
+            {
+                carga_carrera(&ingre,mostrar_idCarreras(ingre, 1),0);
+                carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
+            }
+            else if(a == mostrar_idCarreras(ingre, 1))
+            {
+                carga_carrera(&ingre,mostrar_idCarreras(ingre, 2),1);
+                carga_carrera(&ingre,0,2);
+            }
+            else
+                carga_carrera(&ingre,0,2);
         }
+    }
+    else
+        forwardd(lista);
     }
 }
 
-/*I*/void aspirantesDe(char *carreras[],list_ingresante lista)
-{
+/*I*/void cant_aspirantesXcarrera(char *carreras[],list_ingresante lista){
     ingresante ingre;
-    int contador;
+    int contador=0;
     int t,c,i;
         do{
-        printf("\nIngrese tipo de carrera:\n");
-        printf("1.Carreras de pregrado\t2.Carreras de grado\n");
-        scanf("%d",&t);
+            printf("\nIngrese tipo de carrera:\n");
+            printf("1.Carreras de pregrado\t2.Carreras de grado\n");
+            scanf("%d",&t);
         }while(t<1 || t>2);
 
         if(t == 1)
         {
-            for(i=0; i<=10; i++){
-                printf("%s", carreras[i]);
-                 do{
-                       printf("\nIngrese ID de carrera:");
-                       scanf("%d",&c);
-                   }while(c<0 || c>10);
-            }
-        }
-    else if(t == 2)
-    {
-        for(i=11; i<=25; i++){
-            printf("%s",carreras[i]);
-            do{
-                       printf("\nIngrese ID de carrera:");
-                       scanf("%d",&c);
-                   }while(c<11 || c>25);
-        }
-    }
+            for(i=0; i<=10; i++)
+                printf("%s\n", carreras[i]);
+            do
+            {
+                printf("\nIngrese ID de carrera:");
+                scanf("%d",&c);
+            }while(c<0 || c>10);
 
+        }
+        else if(t == 2)
+        {
+            for(i=11; i<=25; i++)
+                printf("%s",carreras[i]);
+            do
+            {
+                printf("\nIngrese ID de carrera:");
+                scanf("%d",&c);
+            }while(c<11 || c>25);
+    }
     reset(&lista);
 
     while(!isOos(lista))
     {
         ingre = copyy(lista);
+        int a;
 
         for(i=0; i<3; i++)
         {
     /*Ver si coinciden las carreras y si son aspirantes*/
-    if(mostrar_idCarreras(ingre, i) == c && mostrar_estado(ingre) == 2)
-            contador++;
+    if(mostrar_idCarreras(ingre,i) == c && mostrar_estado(ingre) == 2){
+
+            contador=contador+1;}
     }
     forwardd(&lista);
     }
 
-    printf("Se hallaron %d aspirantes.\n",contador);
+    printf("Se hallaron %d aspirantes.",contador);
 }
 
-/*J*/void mostrarAprobaronIngreso(char *carreras[],list_ingresante lista,int id,ingresante ingre)
+/*J*/void mostrarAprobaronIngreso(list_ingresante lista,int id,ingresante ingre)
 {
     if(isOos(lista)){
         exit(1);
     }else{
             ingre=copyy(lista);
 
-        if( (mostrar_idCarreras(ingre, 0) == id || mostrar_idCarreras(ingre, 1)==id || mostrar_idCarreras(ingre, 2)==id) && mostrar_estadoIngreso(ingre)==1){
-
-
-        printf("Nombre: %s\n", mostrar_nom(ingre));
-        printf("Apellido: %s\n", mostrar_ape(ingre));
-        printf("DNI: %ld\n", mostrar_dni(ingre));
-        printf("Celular: %s\n", mostrar_cel(ingre));
-        printf("------------------------\n");
-        forwardd(&lista);
-        mostrarAprobaronIngreso(carreras,lista,id,ingre);
+        if( (mostrar_idCarreras(ingre, 0) == id || mostrar_idCarreras(ingre, 1)==id || mostrar_idCarreras(ingre, 2)==id) && mostrar_estadoIngreso(ingre)==1)
+        {
+            printf("Nombre: %s\n", mostrar_nom(ingre));
+            printf("Apellido: %s\n", mostrar_ape(ingre));
+            printf("DNI: %ld\n", mostrar_dni(ingre));
+            printf("Celular: %s\n", mostrar_cel(ingre));
+            printf("------------------------\n");
+            forwardd(&lista);
+            mostrarAprobaronIngreso(lista, id, ingre);
         }
 
-        else{forwardd(&lista);
-                 mostrarAprobaronIngreso(carreras,lista,id,ingre);
-            }
-
+        else
+        {
+            forwardd(&lista);
+            mostrarAprobaronIngreso(lista, id, ingre);
+        }
     }
 }
 
@@ -802,13 +807,12 @@ int main()
     fclose(tfa);
 }
 
-/*L*/void precarga(list_ingresante *lista)
+/*L*/void precarga(list_ingresante *lista, FILE *arch_ingresantes)
 {
-    int n=0, estado, id, id2, id3;
+    int estado, id, ingreso;
     long dni;
-    char aux[20];
+    char nom[20], ape[20], cel[20];
     ingresante ingre;
-    FILE *arch_ingresantes = fopen("ingresantes.txt", "r");
 
     if(arch_ingresantes == NULL)
     {
@@ -817,47 +821,54 @@ int main()
     }
     else
     {
-        reset(lista);
-        while(arch_ingresantes != EOF)
+        while(feof(arch_ingresantes) == 0 && !isFull())
         {
-           switch(n)
-           {
-            case 0:
-                init(&ingre);
-               fscanf(arch_ingresantes, "%[^\n] s", aux);
-               carga_nom(&ingre, aux);
-                break;
-            case 1:
-               fscanf(arch_ingresantes, "%[^\n] s", aux);
-               carga_ape(&ingre, aux);
-                break;
-            case 2:
-                fscanf(arch_ingresantes, "%ld", dni);
-                carga_dni(&ingre, dni);
-                break;
-            case 3:
-                fscanf(arch_ingresantes, "%[^\n] s", aux);
-                carga_cel(&ingre, aux);
-                break;
-            case 4:
-                fscanf(arch_ingresantes, "%i", estado);
-                carga_estado(&ingre, estado);
-                break;
-            case 5:
-                fscanf(arch_ingresantes, "%i", estado);
-                carga_ingreso(&ingre, estado);
-                break;
-            case 6:
-                fscanf(arch_ingresantes, "%i %i %i", id, id2, id3);
-                carga_carrera(&ingre, id, 0);
-                carga_carrera(&ingre, id2, 1);
-                carga_carrera(&ingre, id3, 2);
-                break;
+            fflush(stdin);
+            init(&ingre);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%[^\n] s", nom);
+            carga_nom(&ingre, nom);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%[^\n] s", ape);
+            carga_ape(&ingre, ape);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%ld", &dni);
+            carga_dni(&ingre, dni);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%s", cel);
+            carga_cel(&ingre, cel);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &estado);
+            carga_estado(&ingre, estado);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &ingreso);
+            carga_ingreso(&ingre, ingreso);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &id);
+            carga_carrera(&ingre, id, 0);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &id);
+            carga_carrera(&ingre, id, 1);
+
+            fflush(stdin);
+            fscanf(arch_ingresantes, "%i", &id);
+            carga_carrera(&ingre, id, 2);
+
+            insertt(lista, ingre);
            }
-           insertt(lista, ingre);
-           forwardd(lista);
-           n++;
         }
+        ingresante aux1 = copyy(*lista);
+        forwardd(lista);
+        ingresante aux2 = copyy(*lista);
+
+        printf("%s\n%s\n", mostrar_nom(aux1), mostrar_nom(aux2));
     }
-    fclose(arch_ingresantes);
-}
+
