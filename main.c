@@ -329,6 +329,7 @@ int main()
     }
     else
     {
+        carga_ingreso(&ingre,0);
         do
         {
             printf("t<1> Papeles completos.\t<2> Papeles incompletos.\n", 162);
@@ -336,12 +337,11 @@ int main()
             if(papeles < 1 || papeles > 2)
                 printf("Debe elegir una de las opciones que se muestran.\n");
         }while(papeles < 1 || papeles > 2);
-
-        carga_ingreso(&ingre, 0);
         if(papeles == 1)
             carga_estado(&ingre, 2);
         else
             carga_estado(&ingre, 1);
+    }
     }
 
     anotar_carrera(carreras, &ingre);
