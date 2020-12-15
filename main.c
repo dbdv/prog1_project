@@ -17,9 +17,9 @@ u->163
 
 /*extra*/void anotar_carrera(char *carreras[], ingresante *ingre);
 
-/*B*/ingresante verIngresante(list_ingresante lista);
+/*B*/int verIngresante(list_ingresante *lista);
 
-/*C*/void mostrarBuscado(list_ingresante lista, char* carreras[]);
+/*C*/void mostrarBuscado(list_ingresante *lista, char* carreras[]);
 
 /*D*/void ingresantesDe(char *carreras[], list_ingresante l);
 
@@ -115,7 +115,7 @@ int main()
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
             else
-                mostrarBuscado(lista, carreras);
+                mostrarBuscado(&lista, carreras);
             break;
         case 3:
             if(isEmpy(lista))
@@ -322,7 +322,10 @@ int main()
     }while(estado != 1 && estado !=0);
 
     if(estado == 1)
+    {
         carga_ingreso(&ingre, estado);
+        carga_estado(&ingre, 3);
+    }
     else
     {
         do
@@ -333,9 +336,14 @@ int main()
                 printf("Debe elegir una de las opciones que se muestran.\n");
         }while(papeles < 1 || papeles > 2);
         if(papeles == 1)
-            carga_ingreso(&ingre, 2);
-        else
-            carga_ingreso(&ingre, 1);
+        {
+            carga_ingreso(&ingre, estado);
+            carga_estado(&ingre, 2);
+        }else
+        {
+            carga_ingreso(&ingre, estado);
+            carga_estado(&ingre, 1);
+        }
     }
 
     anotar_carrera(carreras, &ingre);
@@ -390,7 +398,7 @@ int main()
     }
 }
 
-/*B*/ingresante verIngresante(list_ingresante lista)
+/*B*/int verIngresante(list_ingresante *lista)
 {
     int option, id;
     long aux;
@@ -414,16 +422,16 @@ int main()
                 printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
         }while(aux < 10000000 || aux > 99999999);
 
-        reset(&lista);
-        while(!isOos(lista))
+        reset(lista);
+        while(!isOos(*lista))
         {
-            ingre = copyy(lista);
+            ingre = copyy(*lista);
             if(aux == mostrar_dni(ingre))
             {
-                return ingre;
+                return 1;
             }else
             {
-                forwardd(&lista);
+                forwardd(lista);
             }
         }
     }
@@ -437,35 +445,31 @@ int main()
                 printf("El n%c que intenta usaar contiene errores. Intente nuevamente.\n", 167);
         }while(id < 0);
 
-        reset(&lista);
-        while(!isOos(lista))
+        reset(lista);
+        while(!isOos(*lista))
         {
-            ingre = copyy(lista);
+            ingre = copyy(*lista);
             if(id == mostrar_n_inscrip(ingre))
             {
-                return ingre;
+                return 1;
             }else
             {
-                forwardd(&lista);
+                forwardd(lista);
             }
         }
     }
-    carga_dni(&ingre, 0); /*Retorna un ingresante "fantasma"*/
 
-    return ingre;
+    return 0;
 }
 
-/*C*/void mostrarBuscado(list_ingresante lista, char* carreras[])
+/*C*/void mostrarBuscado(list_ingresante *lista, char* carreras[])
 {
-    int  i, *aux1, estado;
-    ingresante ingre = verIngresante(lista);
-    aux1 = mostrar_idCarreras(ingre);
-    estado = mostrar_estado(ingre);
+    int  i, aux1, estado;
+    ingresante ingre;
 
-    if(mostrar_dni(ingre) == 0)
-        printf("El usuario que intenta ver no se encuentra en el listado.\n");
-    else
+    if(verIngresante(lista))
     {
+        ingre = copyy(*lista);
         printf("Nombre: %s\n", mostrar_nom(ingre));
         printf("Apellido: %s\n", mostrar_ape(ingre));
         printf("DNI: %ld\n", mostrar_dni(ingre));
@@ -491,10 +495,14 @@ int main()
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            if( aux1[i] > 0 && aux1[i] < 24)
-                printf("\t%s.\n", carreras[aux1[i]]);
+            aux1 = mostrar_idCarreras(ingre)[i];
+            if( aux1 > 0 && aux1 < 24)
+                printf("\t%s.\n", carreras[aux1]);
         }
     }
+    else
+        printf("El usuario que intenta ver no se encuentra en el listado.\n");
+
 }
 
 /*D*/void ingresantesDe(char *carreras[], list_ingresante l)

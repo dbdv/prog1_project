@@ -88,13 +88,10 @@ int mostrar_estadoIngreso(ingresante ingre){
 }
 
 int* mostrar_idCarreras(ingresante ingre){
-    int *aux=(int*)malloc(sizeof(int)*3);
-    aux = ingre.ID_carr;
-    return aux;
-    /*
+
     int i, *aux=(int*)malloc(sizeof(int)*3);
     for(i=0; i<3; i++)
-        *(aux+i) = ingre.ID_carr[i];
+        aux[i] = ingre.ID_carr[i];
     return aux;
     /*Despues cuando queremos ver los ID cargados usamos una iteracion*/
 }
