@@ -491,7 +491,7 @@ int main()
         printf("Carrera/s:\n");
         for(i = 0; i < 3; i++)
         {
-            if( aux1[i] > 0 || aux1[i] < 24)
+            if( aux1[i] > 0 && aux1[i] < 24)
                 printf("\t%s.\n", carreras[aux1[i]]);
         }
     }
