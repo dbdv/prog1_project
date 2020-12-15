@@ -41,7 +41,7 @@ u->163
 
 int main()
 {
-    int option, i, suboption, ad;
+    int option, i, suboption, ad, n;
     long auxD;
     char *carreras[25], aux[20];
     ingresante ingre;
@@ -83,7 +83,7 @@ int main()
             printf("<2> Mostar los datos de un ingresante.\t\t<7> Ver los ingresantes que aprobaron el ingreso.\n");
             printf("<3> Ver todos los ingresantes de una materia.\t<8> Realizar una precarga de ingresantes desde archivos.\n");
             printf("<4> Ver todos los ingresantes cargados.\t\t<9> Guardar los datos de los ingresantes que pasaron al TFA.\n");
-            printf("<5> Modificar el campo ingreso de un usuario.\t<0> Volver atr%cs.\n", 161);
+            printf("<5> Modificar el campo ingreso de un usuario.\t<0> Volver atr%cs.\n", 160);
             printf("Operacion a realizar: ");
             scanf("%i", &option);
             if(option < 0 || option > 9)
@@ -95,7 +95,21 @@ int main()
             if(isFull(lista))
                 printf("La lista se encuentra llena, no puede cargar mas usuarios.\n");
             else
-                cargar_usuarios(&lista, carreras);
+            {
+                printf("Cantidad a cargar: ");
+                scanf("%i", &n);
+                for(i = 0; i < n; i++)
+                {
+                    if(isFull())
+                        printf("Se ha llenado la lista, pudo cargar %i ingresantes.\n", i);
+                    else
+                    {
+                        cargar_usuarios(&lista, carreras);
+                        forwardd(&lista);
+                    }
+
+                }
+            }
             break;
         case 2:
             if(isEmpy(lista))
@@ -170,7 +184,7 @@ int main()
             printf("\t\t\t\t\tSISTEMA UNSL\n");
             printf("------------------------\tMENU DE OPCIONES DE OPERACIONES        ------------------------\n");
             printf("<1> Inscribirse a otra carrera.\t\t<2> Darse de baja en una carrera.\n");
-            printf("<0> Volver atr%cs.\n", 161);
+            printf("<0> Volver atr%cs.\n", 160);
             printf("Operacion a realizar: ");
             scanf("%i", &option);
             if(option < 0 || option > 10)
@@ -226,6 +240,8 @@ int main()
     }while(option != 0);
 
     }
+    if(suboption == 0)
+        printf("Ponganos un 10 profe ;)\n");
 }while(suboption != 0);
 
 
@@ -239,10 +255,11 @@ int main()
 /*A*/void cargar_usuarios(list_ingresante *lista, char *carreras[])
 {
     long dni;
-    int estado, au;
+    int estado, au, papeles;
     char aux[15], codPais[4], codArea[7], num[9], tel[20];
     ingresante ingre;
 
+    init(&ingre);
     printf("Ingrese su nombre: ");
     fflush(stdin);
     gets(aux);
@@ -304,15 +321,22 @@ int main()
             printf("Debe elegir una de las opciones que se muestran.\n");
     }while(estado != 1 && estado !=0);
 
-    carga_ingreso(&ingre, estado);
-
-    do
+    if(estado == 1)
+        carga_ingreso(&ingre, estado);
+    else
     {
-        printf("Condici&cn\t<1> Preinscripto\t<2> Aspirante\t<3> Ingresante\n", 162);
-        scanf("%i", &estado);
-        if(estado < 1 || estado > 3)
-            printf("Debe elegir una de las opciones que se muestran.\n");
-    }while(estado < 1 || estado > 3);
+        do
+        {
+            printf("t<1> Papeles completos.\t<2> Papeles incompletos.\n", 162);
+            scanf("%i", &papeles);
+            if(papeles < 1 || papeles > 2)
+                printf("Debe elegir una de las opciones que se muestran.\n");
+        }while(papeles < 1 || papeles > 2);
+        if(papeles == 1)
+            carga_ingreso(&ingre, 2);
+        else
+            carga_ingreso(&ingre, 1);
+    }
 
     anotar_carrera(carreras, &ingre);
 
@@ -322,67 +346,111 @@ int main()
 
 /*extra*/void anotar_carrera(char *carreras[], ingresante *ingre)
 {
-    int option, id, i;
+    int option, id, i, cant, j;
 
     printf("\tINSCRIPCION A CARRERAS.\n");
-    printf("1.Carreras de pregrado\t2.Carreras de grado.\t0.Salir del programa.\n");
     do
     {
-        scanf("%i", &option);
-        if(option <0 || option >2)
-            printf("No seleccion%c una opci%cn v%clida. Intente nuevamente.\n",162,162,160);
-    }while(option < 0 || option >2);
-    if(option == 1)
+        printf("En cauntas carreras piensa inscribirse\n<1>\t<2>\<3>\n");
+        scanf("%i", &cant);
+        if(cant < 0 || cant > 3)
+            printf("Debe ingresar una de las cantidades que se muestran.\n");
+    }while(cant < 0 || cant > 3);
+
+    for(j=0; j<= cant; j++){
+        printf("1.Carreras de pregrado\t2.Carreras de grado.\t0.Salir del programa.\n");
+        do
         {
-            for(i=0; i<=10; i++)
-                printf("%s", carreras[i]);
+            scanf("%i", &option);
+            if(option <0 || option >2)
+                printf("No seleccion%c una opci%cn v%clida. Intente nuevamente.\n",162,162,160);
+        }while(option < 0 || option >2);
+        if(option == 1)
+            {
+                for(i=0; i<=10; i++)
+                    printf("%s", carreras[i]);
+            }
+        else if(option == 2)
+        {
+            for(i=11; i<=25; i++)
+                printf("%s.\n",carreras[i]);
         }
-    else if(option == 2)
-    {
-        for(i=11; i<=25; i++)
-            printf("%s",carreras[i]);
+
+        printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
+        do
+        {
+            scanf("%i", &id);
+            if(id<0 || id > 23)
+                printf("No es un ID v%clido. Intente nuevamente.\n",162);
+            else if(id == 10)
+                printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
+        }while(id<0 || id > 24 || id == 10);
+
+        carga_carrera(&ingre, id, j);
     }
-
-    printf("Escriba el ID de la carrera a la que se quiere inscribir: ");
-    do
-    {
-        scanf("%i", &id);
-        if(id<0 || id > 23)
-            printf("No es un ID v%clido. Intente nuevamente.\n",162);
-        else if(id == 10)
-            printf("Esta carrera no est%c disponible en a%cos impares.\nIntente nuevamente.\nID:",162,164);
-    }while(id<0 || id > 24 || id == 10);
-
-    carga_carrera(&ingre, id, 0);
 }
 
 /*B*/ingresante verIngresante(list_ingresante lista)
 {
+    int option, id;
     long aux;
     ingresante ingre;
 
     do
     {
-        printf("Ingrese el DNI del ingresante que quiere consultar: ");
-        scanf("%ld", &aux);
-        if(aux < 10000000 || aux > 99999999)
-            printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
-    }while(aux < 10000000 || aux > 99999999);
+        printf("<1> Buscar por DNI.\t<2> Buscar por ID.\n");
+        scanf("%i", &option);
+        if(option != 1 && option != 2)
+            printf("Debe ingresar una de las opciones que se muestran.\n");
+    }while(option != 1 && option != 2);
 
-    reset(&lista);
-    while(!isOos(lista))
+    if(option == 1)
     {
-        ingre = copyy(lista);
-        if(aux == mostrar_dni(ingre))
+        do
         {
-            return ingre;
-        }else
+            printf("Ingrese el DNI del ingresante que quiere consultar: ");
+            scanf("%ld", &aux);
+            if(aux < 10000000 || aux > 99999999)
+                printf("El DNI que intenta buscar tiene errores. Intente nuevamente.\n");
+        }while(aux < 10000000 || aux > 99999999);
+
+        reset(&lista);
+        while(!isOos(lista))
         {
-            forwardd(&lista);
+            ingre = copyy(lista);
+            if(aux == mostrar_dni(ingre))
+            {
+                return ingre;
+            }else
+            {
+                forwardd(&lista);
+            }
         }
     }
+    else
+    {
+        do
+        {
+            printf("Ingrese el n%c de inscripci%cn del ingresante que quiere consultar: ", 167, 162);
+            scanf("%i", &id);
+            if(id < 0)
+                printf("El n%c que intenta usaar contiene errores. Intente nuevamente.\n", 167);
+        }while(id < 0);
 
-    carga_dni(&ingre, 0);
+        reset(&lista);
+        while(!isOos(lista))
+        {
+            ingre = copyy(lista);
+            if(id == mostrar_n_inscrip(ingre))
+            {
+                return ingre;
+            }else
+            {
+                forwardd(&lista);
+            }
+        }
+    }
+    carga_dni(&ingre, 0); /*Retorna un ingresante "fantasma"*/
 
     return ingre;
 }
@@ -578,7 +646,7 @@ int main()
 /*H*/void darBaja(list_ingresante *lista,long aux,ingresante ingre,char *carreras[])
 {
     int i,aux1,op,a;
-    reset(&lista);
+    reset(lista);
 
     while(!isOos(*lista)){
 
@@ -618,7 +686,7 @@ int main()
         }
         else
         {
-            forwardd(&lista);
+            forwardd(lista);
         }
     }
 }
@@ -741,6 +809,7 @@ int main()
         reset(lista);
         while(!isOos(*lista))
         {
+            init(&ingre);
            switch(n)
            {
             case 0:
@@ -774,6 +843,7 @@ int main()
                 carga_carrera(&ingre, id3, 2);
                 break;
            }
+           insertt(lista, ingre);
            forwardd(lista);
            n++;
         }

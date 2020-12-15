@@ -1,25 +1,25 @@
-Carreras de pregrado
-1.Tecnicatura Universitaria en Electrónica
-2.Tecnicatura Universitaria en Energías Renovables
-3.Tecnicatura Universitaria en Explotación Minera
-4.Tecnicatura Universitaria en Geoinformática
-5.Tecnicatura Universitaria en Obras Viales  
-6.Tecnicatura Universitaria en Procesamiento de Minerales
-7.Tecnicatura Universitaria en Redes de Computadoras
-8.Tecnicatura Universitaria en Telecomunicaciones
-9.Tecnicatura Universitaria en Web
-10.Tecnicatura Universitaria en Fotografía
-Carreras de grado 
-12.Ingeniería Electrónica con Orientación en Sistemas Digitales
-13.Ingeniería en Computación
-14.Ingeniería en Informática
-15.Ingeniería en Minas
-16.Licenciatura en Ciencias de la Computación (Título Intermedio Analista-Programador Universitario)
-17.Licenciatura en Ciencias Geológicas
-18.Licenciatura en Ciencias Matemáticas
-19.Licenciatura en Física  (Título Intermedio de Auxiliar en Física Aplicada)
-20.Licenciatura en Matemática Aplicada
-21.Profesorado en Ciencias de la Computación
-22.Profesorado en Física
-23.Profesorado en Matemática
-24.Profesorado en Tecnología Electrónica
+CARRERAS DE PREGRADO
+1.TECNICATURA UNIVERSITARIA EN ELECTRONICA
+2.TECNICATURA UNIVERSITARIA EN ENERGIAS RENOVABLES
+3.TECNICATURA UNIVERSITARIA EN EXPLOTACION MINERA
+4.TECNICATURA UNIVERSITARIA EN GEOINFORMATICA
+5.TECNICATURA UNIVERSITARIA EN OBRAS VIALES  
+6.TECNICATURA UNIVERSITARIA EN PROCESAMIENTO DE MINERALES
+7.TECNICATURA UNIVERSITARIA EN REDES DE COMPUTADORAS
+8.TECNICATURA UNIVERSITARIA EN TELECOMUNICACIONES
+9.TECNICATURA UNIVERSITARIA EN WEB
+10.TECNICATURA UNIVERSITARIA EN FOTOGRAFIA
+CARRERAS DE GRADO
+12.INGENIERIA ELECTRONICA CON ORIENTACION EN SISTEMAS DIGITALES
+13.INGENIERIA EN COMPUTACION
+14.INGENIERIA EN INFORMATICA
+15.INGENIERIA EN MINAS
+16.LICENCIATURA EN CIENCIAS DE LA COMPUTACION (TITULO INTERMEDIO ANALISTA-PROGRAMADOR UNIVERSITARIO)
+17.LICENCIATURA EN CIENCIAS GEOLOGICAS
+18.LICENCIATURA EN CIENCIAS MATEMATICAS
+19.LICENCIATURA EN FISICA  (TITULO INTERMEDIO DE AUXILIAR EN FISICA APLICADA)
+20.LICENCIATURA EN MATEMATICA APLICADA
+21.PROFESORADO EN CIENCIAS DE LA COMPUTACION
+22.PROFESORADO EN FISICA
+23.PROFESORADO EN MATEMATICA
+24.PROFESORADO EN TECNOLOGÍA ELECTRONICA
