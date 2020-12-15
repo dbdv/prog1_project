@@ -673,11 +673,14 @@ int main()
                 {
                     aux1 = mostrar_idCarreras(ingre, i);
                     if( aux1 > 0 || aux1 < 24)
-                    printf("\t%s.\n", carreras[aux1]);
+                        printf("\t%s.\n", carreras[aux1]);
                 }
-        do{
-        printf("¿Elija opcion:\n1-Salir de una carrera\n2-Salir de todas las carreras\n");
-        }while(op<1 || op>2);
+        do
+        {
+            printf("Elija opcion:\n<1> Salir de una carrera\t<2> Salir de todas las carreras\n");
+            scanf("%i", &op);
+        }while(op != 1 && op != 2);
+        printf("Hola\n");//------------------------------------------------------------------------------
 
 
         if(op==2){
