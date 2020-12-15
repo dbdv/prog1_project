@@ -70,7 +70,7 @@ int main()
 
  do
  {
-        printf("Usted es..\t<1> Alumno.\n\t<2> Administrador.\t<0> Salir.\n");
+        printf("Usted es..\n\t<1> Alumno.\n\t<2> Administrador.\t<0> Salir.\n");
         scanf("%i", &suboption);
         if(suboption < 0 || suboption > 2)
             printf("No ha elegido una opci%cn disponible.\n", 162);
@@ -166,6 +166,7 @@ int main()
                 precarga(&lista);
                 printf("Carga completa.\n");
             }
+            break;
         case 9:
             if(isEmpy(lista))
                 printf("Aun no hay usuarios cargados por lo que no puede consultar informacion.\n");
@@ -323,7 +324,7 @@ int main()
 
     if(estado == 1)
     {
-        carga_ingreso(&ingre, estado);
+        carga_ingreso(&ingre, 1);
         carga_estado(&ingre, 3);
     }
     else
@@ -335,15 +336,12 @@ int main()
             if(papeles < 1 || papeles > 2)
                 printf("Debe elegir una de las opciones que se muestran.\n");
         }while(papeles < 1 || papeles > 2);
+
+        carga_ingreso(&ingre, 0);
         if(papeles == 1)
-        {
-            carga_ingreso(&ingre, estado);
             carga_estado(&ingre, 2);
-        }else
-        {
-            carga_ingreso(&ingre, estado);
+        else
             carga_estado(&ingre, 1);
-        }
     }
 
     anotar_carrera(carreras, &ingre);
@@ -815,12 +813,12 @@ int main()
     else
     {
         reset(lista);
-        while(!isOos(*lista))
+        while(arch_ingresantes != EOF)
         {
-            init(&ingre);
            switch(n)
            {
             case 0:
+                init(&ingre);
                fscanf(arch_ingresantes, "%[^\n] s", aux);
                carga_nom(&ingre, aux);
                 break;
